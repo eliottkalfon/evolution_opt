@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Genetic Algorithm &#8212; evolution_opt 0.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">evolution_opt 0.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="genetic-algorithm">
+<h1>Genetic Algorithm<a class="headerlink" href="#genetic-algorithm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-main">
+<span id="main-module"></span><h2>Main Module<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="main.Categorical">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Categorical</code><span class="sig-paren">(</span><em class="sig-param">value_list</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Categorical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Categorical Parameter class, member of the Search Space</p>
+<p>Required inputs for initialisation
+value_list (iterable) - list of possible values
+name (str) - parameter name</p>
+<p>Attributes
+value_list (iterable) - list of possible values
+name (str) - parameter name
+var_type (str) - parameter type, used in the sampling process
+check (str) - string ‘parameter’, used to check the integrity of the search space</p>
+<p>Note
+This parameter’s name must be consistent with the keys of the dictionary
+fed into the optimised function
+An error will also be raised if the lower bound is superior or equal to the lower bound</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.Individual">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Individual</code><span class="sig-paren">(</span><em class="sig-param">ind_id</em>, <em class="sig-param">parent_id</em>, <em class="sig-param">stage_init</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Single individual in a population</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id_number</strong> (<em>int</em>) – identifier of the individual</p></li>
+<li><p><strong>parent_id</strong> (<em>tuple</em>) – tuple containing the id of the two parents</p></li>
+<li><p><strong>stage_init</strong> (<em>int</em>) – stage in which the individual was generated</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – dictionary of parameters</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="main.Individual.ind_id">
+<code class="sig-name descname">ind_id</code><a class="headerlink" href="#main.Individual.ind_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>identifier of the individual</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="main.Individual.parent_id">
+<code class="sig-name descname">parent_id</code><a class="headerlink" href="#main.Individual.parent_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>tuple containing the id of the two parents</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="main.Individual.stage_init">
+<code class="sig-name descname">stage_init</code><a class="headerlink" href="#main.Individual.stage_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>stage in which the individual was generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="main.Individual.params">
+<code class="sig-name descname">params</code><a class="headerlink" href="#main.Individual.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary of parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="main.Individual.fitness">
+<code class="sig-name descname">fitness</code><a class="headerlink" href="#main.Individual.fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness of the individual (default:None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Individual.get_fitness">
+<code class="sig-name descname">get_fitness</code><span class="sig-paren">(</span><em class="sig-param">opt_function</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Individual.get_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates an individual’s fitness based on its parameters and a function</p>
+<p>Arguments
+function - user-selected function to be optimised</p>
+<p>Note
+This function must take a dictionary as argument.
+This dictionary’s keys must match the search space’s parameter name</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="main.Integer">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Integer</code><span class="sig-paren">(</span><em class="sig-param">lower_bound</em>, <em class="sig-param">upper_bound</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Integer Parameter class, member of the Search Space</p>
+<p>Required inputs for initialisation
+lower_bound (int) - parameter space lower bound
+upper_bound (int) - parameter space upper bound
+name (str) - parameter name</p>
+<p>Attributes
+lower_bound (int) - parameter space lower bound
+upper_bound (int) - parameter space upper bound
+name (str) - parameter name
+var_type (str) - parameter type, used in the sampling process
+check (str) - string ‘parameter’, used to check the integrity of the search space</p>
+<p>Note
+This parameter’s name must be consistent with the keys of the dictionary
+fed into the optimised function
+An error will also be raised if the lower bound is superior or equal to the lower bound</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="main.Population">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Population</code><span class="sig-paren">(</span><em class="sig-param">pop_size</em>, <em class="sig-param">search_space</em>, <em class="sig-param">minimize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The PoPulation class is the main class of the genetic algorithm</p>
+<p>Required inputs for initialisation
+pop_size (int) - size of the population
+search_space (list) - list of parameters initialised with the Integer, Real or Categorical classes defined above
+Optional
+minimize (bool) - True if the optimisation is a minimisation problem, False for maximisation (default: True)</p>
+<p>Attributes
+pop_size (int) - size of the population
+search_space (list) - list of parameters initialised with the Integer, Real or Categorical classes defined above
+stage (int) - current evolution stage, set to 0
+id_count (int) - individual counter, used to generate ids, set to 0
+reverse (bool) - Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
+param_names (list) - list of the parameter names listed in the search space
+param_dict (dict) - dictionary of parameters generated from the search space list</p>
+<p>Methods
+get_random_param - randomly draws a new parameter value
+get_initial_population - randomly generates a new population
+evaluate_population - evaluates a population’s fitness
+sort_population - sort a population based on its fitness
+natural_selection - selects the n best individuals of a population
+get_offspring - generates offspring and appends them to the population
+round_log - generates a log describing the evolution round’s history
+evolution - executes the evolution algorithm
+fitness_overtime - plots the best population fitness by evolution round
+network_genealogy - returns a networkx compatible genealogy
+get_population_params - returns a list of the population’s parameters
+get_population_params_fitness - returns a list of the population’s parameters and fitness
+get_best_params - returns the best parameters of the population (based on fitness)</p>
+<p>Note
+An error will be raised if an item of the search space list is not a member of the Integer, Real or Categorical class</p>
+<dl class="method">
+<dt id="main.Population.evaluate_population">
+<code class="sig-name descname">evaluate_population</code><span class="sig-paren">(</span><em class="sig-param">opt_function</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.evaluate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates each of a population’s individuals based on an optimisation function</p>
+<p>Argument
+opt_function (function) - function to be optimised</p>
+<p>Note
+To correctly define the optimisation function, please make sure that the following requirements are met:
+1) The function requires a parameter dictionary as only required argument
+2) The name of the dictionary keys expected by the function matches the parameter names</p>
+<blockquote>
+<div><p>defined in the search space</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>The search space has been defined to avoid errors, or the function has been built to</p></li>
+</ol>
+<blockquote>
+<div><p>handle them correctly</p>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>The function’s execution should not generate errors</p></li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.evolution">
+<code class="sig-name descname">evolution</code><span class="sig-paren">(</span><em class="sig-param">opt_function</em>, <em class="sig-param">n_rounds</em>, <em class="sig-param">n_children</em>, <em class="sig-param">n_sample</em>, <em class="sig-param">p_mutation</em>, <em class="sig-param">p_crossover</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.evolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the evolution algorithm for a set number of iterations</p>
+<p>Arguments
+opt_function (function) - function to be optimised
+n_rounds (int) - number of evolution rounds
+n_children (int) - number of children
+n_sample (int) - number of candidate parents sampled from the population
+p_mutation (float) - mutation probability
+p_crossover (float) - crossover probability</p>
+<p>Ouput
+log_df (dataframe) - dataframe containing a summary of the evolution process,
+with a row by id/stage combination</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.fitness_overtime">
+<code class="sig-name descname">fitness_overtime</code><span class="sig-paren">(</span><em class="sig-param">log_df</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.fitness_overtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots fitness over time</p>
+<p>Argument
+log_df (dataframe) - dataframe containing a summary of the evolution process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_best_params">
+<code class="sig-name descname">get_best_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_best_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the best parameters of the population - i.e. the parameters of the population’s first individual</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_initial_population">
+<code class="sig-name descname">get_initial_population</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_initial_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly generates a population</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_offspring">
+<code class="sig-name descname">get_offspring</code><span class="sig-paren">(</span><em class="sig-param">n_children</em>, <em class="sig-param">n_sample</em>, <em class="sig-param">p_mutation</em>, <em class="sig-param">p_crossover</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_offspring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a list of offspring</p>
+<p>Arguments
+n_children (int) - number of children
+n_sample (int) - number of candidate parents sampled from the population
+p_mutation (float) - mutation probability
+p_crossover (float) - crossover probability</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_population_params">
+<code class="sig-name descname">get_population_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_population_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a list of the population’s parameters</p>
+<p>Output
+param_list (list) - a list of the poulation’s individuals’ parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_population_params_fitness">
+<code class="sig-name descname">get_population_params_fitness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_population_params_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a list of the population’s parameters and their associated fitness</p>
+<p>Output
+param_fitness (list) - list of dictionaries containing each individual’s parameters and fitness</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.get_random_param">
+<code class="sig-name descname">get_random_param</code><span class="sig-paren">(</span><em class="sig-param">param_name</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.get_random_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly draws a parameter value</p>
+<p>Arguments
+param_name (str) - name of the parameter to be drawn</p>
+<p>Output
+Returns a random parameter value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.natural_selection">
+<code class="sig-name descname">natural_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.natural_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the n best individuals of a population
+This n is the population size</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.network_genealogy">
+<code class="sig-name descname">network_genealogy</code><span class="sig-paren">(</span><em class="sig-param">log_df</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.network_genealogy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a networkX compatible genealogy in a pandas dataframe format</p>
+<p>Argument
+log_df (dataframe) - pandas dataframe containing a summary of the evolution process</p>
+<p>Output
+genealogy (dataframe) - pandas dataframe convertible to a NetworkX graph</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.round_log">
+<code class="sig-name descname">round_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.round_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a round log, with a row for each individual id/stage combination</p>
+<p>Output
+round_log (list) - evolution round description</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Population.sort_population">
+<code class="sig-name descname">sort_population</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Population.sort_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts a population using its individual’s fitness scores</p>
+<p>Note
+This score will be ascending or descending based on the chosen direction of the optimisation problem</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="main.Real">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Real</code><span class="sig-paren">(</span><em class="sig-param">lower_bound</em>, <em class="sig-param">upper_bound</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Real Parameter class, member of the Search Space</p>
+<p>Required inputs for initialisation
+lower_bound (int) - parameter space lower bound
+upper_bound (int) - parameter space upper bound
+name (str) - parameter name</p>
+<p>Attributes
+lower_bound (int) - parameter space lower bound
+upper_bound (int) - parameter space upper bound
+name (str) - parameter name
+var_type (str) - parameter type, used in the sampling process
+check (str) - string ‘parameter’, used to check the integrity of the search space</p>
+<p>Note
+This parameter’s name must be consistent with the keys of the dictionary
+fed into the optimised function
+An error will also be raised if the lower bound is superior or equal to the lower bound</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.optimise">
+<code class="sig-prename descclassname">main.</code><code class="sig-name descname">optimise</code><span class="sig-paren">(</span><em class="sig-param">function</em>, <em class="sig-param">search_space</em>, <em class="sig-param">minimize=True</em>, <em class="sig-param">population_size=20</em>, <em class="sig-param">n_rounds=500</em>, <em class="sig-param">n_children=10</em>, <em class="sig-param">n_sample=4</em>, <em class="sig-param">p_mutation=0.2</em>, <em class="sig-param">p_crossover=0.6</em>, <em class="sig-param">return_log=False</em>, <em class="sig-param">return_population=False</em><span class="sig-paren">)</span><a class="headerlink" href="#main.optimise" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>minimize</strong> (<em>bool</em><em>, </em><em>default=True</em>) – sort direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.solve">
+<code class="sig-prename descclassname">main.</code><code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">function</em>, <em class="sig-param">target_value</em>, <em class="sig-param">search_space</em>, <em class="sig-param">population_size=10</em>, <em class="sig-param">n_rounds=500</em>, <em class="sig-param">n_children=20</em>, <em class="sig-param">n_sample=4</em>, <em class="sig-param">p_mutation=0.2</em>, <em class="sig-param">p_crossover=0.6</em>, <em class="sig-param">return_log=False</em>, <em class="sig-param">return_population=False</em><span class="sig-paren">)</span><a class="headerlink" href="#main.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Genetic Algorithm</a><ul>
+<li><a class="reference internal" href="#module-main">Main Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/scripts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">evolution_opt 0.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eliott Kalfon.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
