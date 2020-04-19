@@ -10,8 +10,12 @@ Welcome to evolution_opt's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   main.rst
-   modules.rst
+
+Main
+====
+
+.. automodule:: main
+   :members:
 
 
 
