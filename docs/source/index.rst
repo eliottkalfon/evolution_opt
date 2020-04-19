@@ -11,6 +11,7 @@ Welcome to evolution_opt's documentation!
    :caption: Contents:
    
    main.rst
+   modules.rst
 
 
 
