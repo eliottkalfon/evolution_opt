@@ -9,6 +9,8 @@ Welcome to evolution_opt's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   main.rst
 
 
 
