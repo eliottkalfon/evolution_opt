@@ -1,2 +1,3 @@
-# evolution_opt
-Evolution-inspired optimisation algorithms
+# Example Package
+
+This is a simple example package. 
