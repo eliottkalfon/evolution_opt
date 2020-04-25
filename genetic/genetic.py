@@ -44,7 +44,7 @@ Example:
     
     3) Run the evolutionary algorithm
     
-        best_params = optimise(difficult_problem, search_space,minimize=True, 
+        best_params = optimise(difficult_problem,search_space,minimize=True, 
                                    population_size=20,n_rounds=500)   
                                    
         # Prints:
