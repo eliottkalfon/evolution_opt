@@ -28,11 +28,12 @@ Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neura
 International Conference on Image Analysis and Processing. Springer, Cham, 2019.</p>
 <h2 id="example">Example</h2>
 <p>To use this module, follow these three simple steps:</p>
-<p>1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:</p>
+<p>1) Define a function to be optimised: </p>
+<p>This function has to take a dictionary of parameter as argument:</p>
 <pre><code>def difficult_problem(param_dict):
-    result = (1-param_dict['x'])**2+100*(param_dict['y']-param_dict['x']**2)
+    result = param_dict['x']**2 + (param_dict['y']+1)**2
     if param_dict['luck'] == 'lucky':
-        result -= 10
+        pass
     else:
         result += 10
     return result
@@ -41,18 +42,23 @@ International Conference on Image Analysis and Processing. Springer, Cham, 2019.
 <p>It could evaluate a model's cross-validation score based on given hyperparameter values,
 ethe efficiency of a resourcing plan&hellip; The possibilities are limitless.</p>
 <p>2) Define a search space:</p>
-<pre><code>search_space = [(
+<pre><code>search_space = [
     Integer(-100,100, 'x'),
     Real(-100,100, 'y'),
     Categorical(['lucky', 'unlucky'], 'luck')
-)]
+]
 </code></pre>
-<p>The search space can be composed of Integer, Real and Categorical variables.</p>
-<p>Numeric parameters are initialised with a lower bound, upper bound and a parameter name</p>
-<p>Categorical parameters require a list of possible values and a parameter name</p>
+<p>The search space can be composed of Integer, Real and Categorical variables.
+Numeric parameters are initialised with a lower bound, upper bound and a parameter name.
+Categorical parameters require a list of possible values and a parameter name.</p>
 <p>3) Run the evolutionary algorithm:</p>
 <pre><code>best_params = optimise(difficult_problem, search_space,minimize=True, 
                            population_size=20,n_rounds=500)
+
+# Prints:
+# Number of Iterations: 500
+# Best score: 0.00410559779230605
+# Best parameters: {'x': -0.0, 'y': -1.0640749388786759, 'luck': 'lucky'}
 </code></pre>
 <details class="source">
 <summary>
@@ -74,7 +80,7 @@ ethe efficiency of a resourcing plan&hellip; The possibilities are limitless.</p
 # 4) Plateau Avoidance &lt;br&gt;
 # 5) Crowding Distance &lt;br&gt;
 
-# In[ ]:
+# In[20]:
 
 
 &#39;&#39;&#39;
@@ -86,15 +92,18 @@ It was inspired by the following paper:
 Example:
     To use this module, follow these three simple steps:
     
-    1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:
+    1) Define a function to be optimised: 
+    
+    This function has to take a dictionary of parameter as argument:
     
         def difficult_problem(param_dict):
-            result = (1-param_dict[&#39;x&#39;])**2+100*(param_dict[&#39;y&#39;]-param_dict[&#39;x&#39;]**2)
+            result = param_dict[&#39;x&#39;]**2 + (param_dict[&#39;y&#39;]+1)**2
             if param_dict[&#39;luck&#39;] == &#39;lucky&#39;:
-                result -= 10
+                pass
             else:
                 result += 10
             return result
+    
     This function could be anything that takes parameters as input and outputs a scalar value.
     
     It could evaluate a model&#39;s cross-validation score based on given hyperparameter values,
@@ -102,30 +111,31 @@ Example:
     
     2) Define a search space:
     
-        search_space = [(
+        search_space = [
             Integer(-100,100, &#39;x&#39;),
             Real(-100,100, &#39;y&#39;),
             Categorical([&#39;lucky&#39;, &#39;unlucky&#39;], &#39;luck&#39;)
-        )]
+        ]
         
     The search space can be composed of Integer, Real and Categorical variables.
-    
-    Numeric parameters are initialised with a lower bound, upper bound and a parameter name
-    
-    Categorical parameters require a list of possible values and a parameter name
+    Numeric parameters are initialised with a lower bound, upper bound and a parameter name.
+    Categorical parameters require a list of possible values and a parameter name.
     
     3) Run the evolutionary algorithm:
     
         best_params = optimise(difficult_problem, search_space,minimize=True, 
-                                   population_size=20,n_rounds=500)
-        
-    
+                                   population_size=20,n_rounds=500)   
+                                   
+        # Prints:
+        # Number of Iterations: 500
+        # Best score: 0.00410559779230605
+        # Best parameters: {&#39;x&#39;: -0.0, &#39;y&#39;: -1.0640749388786759, &#39;luck&#39;: &#39;lucky&#39;}
         
     
 &#39;&#39;&#39;
 
 
-# In[1]:
+# In[2]:
 
 
 import numpy as np
@@ -136,7 +146,7 @@ from matplotlib.offsetbox import AnchoredText
 from sklearn.preprocessing import StandardScaler
 
 
-# In[2]:
+# In[3]:
 
 
 class Individual:
@@ -183,7 +193,7 @@ class Individual:
     
 
 
-# In[3]:
+# In[4]:
 
 
 class Integer():
@@ -294,7 +304,7 @@ class Categorical():
                              .format(self.name))     
 
 
-# In[4]:
+# In[5]:
 
 
 class Population:
@@ -393,13 +403,17 @@ class Population:
         Args:
             opt_function (function) - function to be optimised
         
-        Note
+        Note:
             To correctly define the optimisation function, please make sure that the following requirements are met:
+            
             1) The function requires a parameter dictionary as only required argument
+            
             2) The name of the dictionary keys expected by the function matches the parameter names
               defined in the search space
+            
             3) The search space has been defined to avoid errors, or the function has been built to
               handle them correctly
+            
             4) The function&#39;s execution should not generate errors
         &#39;&#39;&#39;
         for i,ind in enumerate(self.population):
@@ -579,7 +593,7 @@ class Population:
         return self.population[0].params
 
 
-# In[1]:
+# In[6]:
 
 
 def optimise(function, search_space,
@@ -627,7 +641,7 @@ def optimise(function, search_space,
         return best_params
 
 
-# In[6]:
+# In[7]:
 
 
 def solve(function, target_value, search_space, population_size=10,
@@ -674,12 +688,6 @@ def solve(function, target_value, search_space, population_size=10,
     else:
         return best_params
     
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
@@ -1297,13 +1305,17 @@ get_best_params: returns the best parameters of the population (based on fitness
         Args:
             opt_function (function) - function to be optimised
         
-        Note
+        Note:
             To correctly define the optimisation function, please make sure that the following requirements are met:
+            
             1) The function requires a parameter dictionary as only required argument
+            
             2) The name of the dictionary keys expected by the function matches the parameter names
               defined in the search space
+            
             3) The search space has been defined to avoid errors, or the function has been built to
               handle them correctly
+            
             4) The function&#39;s execution should not generate errors
         &#39;&#39;&#39;
         for i,ind in enumerate(self.population):
@@ -1490,17 +1502,15 @@ get_best_params: returns the best parameters of the population (based on fitness
 <dd>
 <div class="desc"><p>Evaluates each of a population's individuals based on an optimisation function</p>
 <h2 id="args">Args</h2>
-<dl>
-<dt>opt_function (function) - function to be optimised</dt>
-<dt><strong><code>Note</code></strong></dt>
-<dd>To correctly define the optimisation function, please make sure that the following requirements are met:
-1) The function requires a parameter dictionary as only required argument
-2) The name of the dictionary keys expected by the function matches the parameter names
-defined in the search space
-3) The search space has been defined to avoid errors, or the function has been built to
-handle them correctly
-4) The function's execution should not generate errors</dd>
-</dl></div>
+<p>opt_function (function) - function to be optimised</p>
+<h2 id="note">Note</h2>
+<p>To correctly define the optimisation function, please make sure that the following requirements are met:</p>
+<p>1) The function requires a parameter dictionary as only required argument</p>
+<p>2) The name of the dictionary keys expected by the function matches the parameter names
+defined in the search space</p>
+<p>3) The search space has been defined to avoid errors, or the function has been built to
+handle them correctly</p>
+<p>4) The function's execution should not generate errors</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1512,13 +1522,17 @@ handle them correctly
     Args:
         opt_function (function) - function to be optimised
     
-    Note
+    Note:
         To correctly define the optimisation function, please make sure that the following requirements are met:
+        
         1) The function requires a parameter dictionary as only required argument
+        
         2) The name of the dictionary keys expected by the function matches the parameter names
           defined in the search space
+        
         3) The search space has been defined to avoid errors, or the function has been built to
           handle them correctly
+        
         4) The function&#39;s execution should not generate errors
     &#39;&#39;&#39;
     for i,ind in enumerate(self.population):

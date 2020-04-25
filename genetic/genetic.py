@@ -1,20 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Genetic Algorithm Main Functions
-
-# **To do:** <br>
-# 1) Finish documentation <br>
-# 2) Test error handling <br>
-# 
-# **Backlog:** <br>
-# 1) Prior Distributions <br>
-# 2) Constraints <br>
-# 3) Early Stopping <br>
-# 4) Plateau Avoidance <br>
-# 5) Crowding Distance <br>
-
-# In[ ]:
+# In[1]:
 
 
 '''
@@ -26,55 +13,63 @@ It was inspired by the following paper:
 Example:
     To use this module, follow these three simple steps:
     
-    1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:
+    1) Define a function to be optimised
+    
+    This function has to take a dictionary of parameter as argument:
     
         def difficult_problem(param_dict):
-            result = (1-param_dict['x'])**2+100*(param_dict['y']-param_dict['x']**2)
+            result = param_dict['x']**2 + (param_dict['y']+1)**2
             if param_dict['luck'] == 'lucky':
-                result -= 10
+                pass
             else:
                 result += 10
             return result
+    
     This function could be anything that takes parameters as input and outputs a scalar value.
     
     It could evaluate a model's cross-validation score based on given hyperparameter values,
-    ethe efficiency of a resourcing plan... The possibilities are limitless.
+    a profit/cost function, the efficiency of a resourcing plan... The possibilities are limitless.
     
-    2) Define a search space:
+    2) Define a search space
     
-        search_space = [(
+        search_space = [
             Integer(-100,100, 'x'),
             Real(-100,100, 'y'),
             Categorical(['lucky', 'unlucky'], 'luck')
-        )]
+        ]
         
     The search space can be composed of Integer, Real and Categorical variables.
     Numeric parameters are initialised with a lower bound, upper bound and a parameter name.
     Categorical parameters require a list of possible values and a parameter name.
     
-    3) Run the evolutionary algorithm:
+    3) Run the evolutionary algorithm
     
         best_params = optimise(difficult_problem, search_space,minimize=True, 
-                                   population_size=20,n_rounds=500)
-        
-    
+                                   population_size=20,n_rounds=500)   
+                                   
+        # Prints:
+        # Number of Iterations: 500
+        # Best score: 0.00410559779230605
+        # Best parameters: {'x': -0.0, 'y': -1.0640749388786759, 'luck': 'lucky'}
         
     
 '''
 
 
-# In[1]:
+# In[2]:
 
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import copy
+import random
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.offsetbox import AnchoredText
 from sklearn.preprocessing import StandardScaler
 
 
-# In[2]:
+# In[3]:
 
 
 class Individual:
@@ -121,7 +116,7 @@ class Individual:
     
 
 
-# In[3]:
+# In[4]:
 
 
 class Integer():
@@ -132,11 +127,13 @@ class Integer():
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
+        step (int, optional): desired step between each selection
     
     Attributes:
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
+        step (int, optional): desired step between each selection
         var_type (str): parameter type, used in the sampling process
         check (str): string 'parameter', used to check the integrity of the search space
     
@@ -147,10 +144,11 @@ class Integer():
     Raises:
         ValueError if the lower bound is superior or equal to the lower bound
     '''
-    def __init__(self, lower_bound, upper_bound, name):
+    def __init__(self, lower_bound, upper_bound, name, step = 1):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
+        self.step = 1
         self.var_type = 'int'
         self.check = 'parameter'
         if self.lower_bound >= self.upper_bound:
@@ -167,11 +165,13 @@ class Real():
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
+        precision (int, optional): desired number of decimals
     
     Attributes:
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
+        precision (int): desired number of decimals
         var_type (str): parameter type, used in the sampling process
         check (str): string 'parameter', used to check the integrity of the search space
     
@@ -182,10 +182,11 @@ class Real():
     Raises:
         ValueError if the lower bound is superior or equal to the lower bound
     '''
-    def __init__(self, lower_bound, upper_bound, name):
+    def __init__(self, lower_bound, upper_bound, name, precision = 3):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
+        self.precision = precision
         self.var_type = 'real'
         self.check = 'parameter'
         if self.lower_bound >= self.upper_bound:
@@ -232,7 +233,7 @@ class Categorical():
                              .format(self.name))     
 
 
-# In[4]:
+# In[5]:
 
 
 class Population:
@@ -298,11 +299,14 @@ class Population:
             A random parameter value selected from the search space
         '''
         if self.param_dict[param_name].var_type=='int':
-            return round(np.random.uniform(self.param_dict[param_name].lower_bound,
-                                           self.param_dict[param_name].upper_bound),0)
+            return random.randrange(self.param_dict[param_name].lower_bound,
+                                    self.param_dict[param_name].upper_bound,
+                                    self.param_dict[param_name].step)
         elif self.param_dict[param_name].var_type=='real':
-            return np.random.uniform(self.param_dict[param_name].lower_bound,
-                                     self.param_dict[param_name].upper_bound)
+            return round(np.random.uniform(
+                                     self.param_dict[param_name].lower_bound,
+                                     self.param_dict[param_name].upper_bound
+                                     ),self.param_dict[param_name].precision)
         elif self.param_dict[param_name].var_type=='categorical':
             return np.random.choice(self.param_dict[param_name].value_list)
         else:
@@ -329,15 +333,19 @@ class Population:
         Evaluates each of a population's individuals based on an optimisation function
         
         Args:
-            opt_function (function) - function to be optimised
+            opt_function (function): function to be optimised
         
-        Note
+        Note:
             To correctly define the optimisation function, please make sure that the following requirements are met:
+            
             1) The function requires a parameter dictionary as only required argument
+            
             2) The name of the dictionary keys expected by the function matches the parameter names
               defined in the search space
+            
             3) The search space has been defined to avoid errors, or the function has been built to
               handle them correctly
+            
             4) The function's execution should not generate errors
         '''
         for i,ind in enumerate(self.population):
@@ -418,7 +426,7 @@ class Population:
         round_log = []
         for rank,individual in enumerate(self.population):
             params_list = []
-            for param in individual.params.keys():
+            for param in self.param_names:
                 params_list.append(individual.params[param])
             log_row = [str(self.stage) + '_' + str(individual.ind_id),    #stage_id individual identifier
                        self.stage,                                        #current stage
@@ -431,7 +439,7 @@ class Population:
             round_log.append(log_row)
         return round_log
     
-    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover):
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose):
         '''
         Executes the evolution algorithm for a set number of iterations
         
@@ -442,12 +450,17 @@ class Population:
              n_sample (int): number of candidate parents sampled from the population
              p_mutation (float): mutation probability
              p_crossover (float): crossover probability
+             verbose (bool): prints progress if True
         
         Returns:
              dataframe: dataframe containing a summary of the evolution process, with a row by id/stage combination
         '''
         log_list = []
         for i in range(n_rounds):
+            if verbose:
+                print('Working on evolution round: {}'.format(i+1))
+                print('Best score: {}'.format(self.population[0].fitness))
+                print('Best parameters: {}'.format(self.population[0].params))
             self.get_offspring(n_children, n_sample, p_mutation, p_crossover)
             self.evaluate_population(opt_function)
             self.sort_population()
@@ -517,15 +530,15 @@ class Population:
         return self.population[0].params
 
 
-# In[1]:
+# In[6]:
 
 
 def optimise(function, search_space,
              minimize=True, population_size=20,
              n_rounds=500, n_children=10, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, return_log = False, 
-             return_population = False):
+             p_crossover=0.6, verbose = False,
+             return_log = False, return_population = False):
     
     '''
     Optimises a function given a search space
@@ -539,6 +552,7 @@ def optimise(function, search_space,
         n_children (int, default = 10): number of children generated at each round
         p_mutation (float, default = 0.2): probability of mutation
         p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        verbose (bool, default = True): describes progress if True
         return_log (bool, default = False): returns an evolution log if true
         return_population (bool, default = False): returns a population object if true
     
@@ -551,7 +565,7 @@ def optimise(function, search_space,
     pop = Population(population_size, search_space=search_space, minimize = minimize)
     pop.get_initial_population()
     pop.evaluate_population(function)
-    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
     best_params = pop.get_best_params()  
     print('Number of Iterations: {}'.format(pop.stage))
     print('Best score: {}'.format(pop.population[0].fitness))
@@ -565,14 +579,14 @@ def optimise(function, search_space,
         return best_params
 
 
-# In[6]:
+# In[7]:
 
 
 def solve(function, target_value, search_space, population_size=10,
              n_rounds=500, n_children=20, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, return_log = False, 
-             return_population = False):
+             p_crossover=0.6, verbose = False,
+             return_log = False, return_population = False):
     '''
     Solves a function for a target value and a search space
     
@@ -585,6 +599,7 @@ def solve(function, target_value, search_space, population_size=10,
         n_children (int, default = 10): number of children generated at each round
         p_mutation (float, default = 0.2): probability of mutation
         p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+         verbose (bool, default = True): describes progress if True
         return_log (bool, default = False): returns an evolution log if true
         return_population (bool, default = False): returns a population object if true
      
@@ -599,7 +614,7 @@ def solve(function, target_value, search_space, population_size=10,
     pop = Population(population_size, search_space=search_space, minimize = True)
     pop.get_initial_population()
     pop.evaluate_population(absolute_error)
-    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
     best_params = pop.get_best_params()
     print('Number of Iterations: {}'.format(pop.stage))
     print('Lowest Absolute Error: {}'.format(pop.population[0].fitness))
@@ -612,12 +627,6 @@ def solve(function, target_value, search_space, population_size=10,
     else:
         return best_params
     
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
