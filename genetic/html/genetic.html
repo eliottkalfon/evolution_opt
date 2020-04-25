@@ -1,0 +1,2068 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.1" />
+<title>genetic API documentation</title>
+<meta name="description" content="This module is a Python implementation of a genetic algorithm with a regularized evolution process.
+It was inspired by the following paper:
+…" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>genetic</code></h1>
+</header>
+<section id="section-intro">
+<p>This module is a Python implementation of a genetic algorithm with a regularized evolution process.
+It was inspired by the following paper:
+Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search."
+International Conference on Image Analysis and Processing. Springer, Cham, 2019.</p>
+<h2 id="example">Example</h2>
+<p>To use this module, follow these three simple steps:</p>
+<p>1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:</p>
+<pre><code>def difficult_problem(param_dict):
+    result = (1-param_dict['x'])**2+100*(param_dict['y']-param_dict['x']**2)
+    if param_dict['luck'] == 'lucky':
+        result -= 10
+    else:
+        result += 10
+    return result
+</code></pre>
+<p>This function could be anything that takes parameters as input and outputs a scalar value.</p>
+<p>It could evaluate a model's cross-validation score based on given hyperparameter values,
+ethe efficiency of a resourcing plan&hellip; The possibilities are limitless.</p>
+<p>2) Define a search space:</p>
+<pre><code>search_space = [(
+    Integer(-100,100, 'x'),
+    Real(-100,100, 'y'),
+    Categorical(['lucky', 'unlucky'], 'luck')
+)]
+</code></pre>
+<p>The search space can be composed of Integer, Real and Categorical variables.</p>
+<p>Numeric parameters are initialised with a lower bound, upper bound and a parameter name</p>
+<p>Categorical parameters require a list of possible values and a parameter name</p>
+<p>3) Run the evolutionary algorithm:</p>
+<pre><code>best_params = optimise(difficult_problem, search_space,minimize=True, 
+                           population_size=20,n_rounds=500)
+</code></pre>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python
+# coding: utf-8
+
+# # Genetic Algorithm Main Functions
+
+# **To do:** &lt;br&gt;
+# 1) Finish documentation &lt;br&gt;
+# 2) Test error handling &lt;br&gt;
+# 
+# **Backlog:** &lt;br&gt;
+# 1) Prior Distributions &lt;br&gt;
+# 2) Constraints &lt;br&gt;
+# 3) Early Stopping &lt;br&gt;
+# 4) Plateau Avoidance &lt;br&gt;
+# 5) Crowding Distance &lt;br&gt;
+
+# In[ ]:
+
+
+&#39;&#39;&#39;
+This module is a Python implementation of a genetic algorithm with a regularized evolution process.
+It was inspired by the following paper:
+    Saltori, Cristiano, et al. &#34;Regularized Evolutionary Algorithm for Dynamic Neural Topology Search.&#34; 
+    International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+
+Example:
+    To use this module, follow these three simple steps:
+    
+    1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:
+    
+        def difficult_problem(param_dict):
+            result = (1-param_dict[&#39;x&#39;])**2+100*(param_dict[&#39;y&#39;]-param_dict[&#39;x&#39;]**2)
+            if param_dict[&#39;luck&#39;] == &#39;lucky&#39;:
+                result -= 10
+            else:
+                result += 10
+            return result
+    This function could be anything that takes parameters as input and outputs a scalar value.
+    
+    It could evaluate a model&#39;s cross-validation score based on given hyperparameter values,
+    ethe efficiency of a resourcing plan... The possibilities are limitless.
+    
+    2) Define a search space:
+    
+        search_space = [(
+            Integer(-100,100, &#39;x&#39;),
+            Real(-100,100, &#39;y&#39;),
+            Categorical([&#39;lucky&#39;, &#39;unlucky&#39;], &#39;luck&#39;)
+        )]
+        
+    The search space can be composed of Integer, Real and Categorical variables.
+    
+    Numeric parameters are initialised with a lower bound, upper bound and a parameter name
+    
+    Categorical parameters require a list of possible values and a parameter name
+    
+    3) Run the evolutionary algorithm:
+    
+        best_params = optimise(difficult_problem, search_space,minimize=True, 
+                                   population_size=20,n_rounds=500)
+        
+    
+        
+    
+&#39;&#39;&#39;
+
+
+# In[1]:
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.offsetbox import AnchoredText
+from sklearn.preprocessing import StandardScaler
+
+
+# In[2]:
+
+
+class Individual:
+    &#39;&#39;&#39;
+    Single individual in a population
+    
+    Args:
+         id_number (int): identifier of the individual
+         parent_id (tuple): tuple containing the id of the two parents
+         stage_init (int): stage in which the individual was generated
+         params (dict): dictionary of parameters
+    
+    Attributes:
+        ind_id (int): identifier of the individual
+        parent_id (tuple): tuple containing the id of the two parents
+        stage_init (int): stage in which the individual was generated
+        params (dict): dictionary of parameters
+        fitness (float): fitness of the individual (default:None)
+    &#39;&#39;&#39;
+    def __init__(self, ind_id, parent_id, stage_init, params):
+        self.ind_id = ind_id
+        self.parent_id = parent_id
+        self.stage_init = stage_init
+        self.params = params
+        self.fitness = None
+    def get_fitness(self,opt_function):
+        &#39;&#39;&#39;
+        Evaluates an individual&#39;s fitness based on its parameters and a function
+        
+        Args:
+            function (function): user-selected function to be optimised
+        
+        Note:
+            This function must take a dictionary as argument. 
+            This dictionary&#39;s keys must match the search space&#39;s parameter name
+        
+        Raises:
+            ValueError if fitness cannot be evaluated for a given individual
+        &#39;&#39;&#39;
+        try:
+            self.fitness = opt_function(self.params)
+        except:
+            raise ValueError(&#34;An error occurred while evaluating Individual {ind_id}&#39;s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function&#39;s execution should not generate errors&#34;.format(ind_id = self.ind_id, params = self.params))
+    
+
+
+# In[3]:
+
+
+class Integer():
+    &#39;&#39;&#39;
+    Integer Parameter class, member of the Search Space
+    
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+    
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+     
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
+    &#39;&#39;&#39;
+    def __init__(self, lower_bound, upper_bound, name):
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        self.name = name
+        self.var_type = &#39;int&#39;
+        self.check = &#39;parameter&#39;
+        if self.lower_bound &gt;= self.upper_bound:
+            raise ValueError(&#34;the lower bound {} has to be less than the&#34;
+                             &#34; upper bound {}&#34;.format(lower_bound, upper_bound))
+        else:
+            pass
+        
+class Real():
+    &#39;&#39;&#39;
+    Real Parameter class, member of the Search Space
+    
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+    
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
+    &#39;&#39;&#39;
+    def __init__(self, lower_bound, upper_bound, name):
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        self.name = name
+        self.var_type = &#39;real&#39;
+        self.check = &#39;parameter&#39;
+        if self.lower_bound &gt;= self.upper_bound:
+            raise ValueError(&#34;the lower bound {} has to be less than the&#34;
+                             &#34; upper bound {}&#34;.format(lower_bound, upper_bound))
+        else:
+            pass
+        
+class Categorical():
+    &#39;&#39;&#39;
+    Categorical Parameter class, member of the Search Space
+    
+    Args:
+        value_list (iterable): list of possible values
+        name (str): parameter name
+    
+    Attributes:
+        value_list (iterable): list of possible values
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the value list argument is not an iterable
+    &#39;&#39;&#39;
+    def __init__(self, value_list, name):
+        self.value_list = value_list
+        self.name = name
+        self.var_type = &#39;categorical&#39;
+        self.check = &#39;parameter&#39;
+        try:
+            if isinstance(value_list, str):
+                #Raises an error if the value_list is a string (separate check because strings are iterables...)
+                raise ValueError(&#34;The list of possible values for the parameter &#39;{}&#39; cannot be a string&#34;
+                                 .format(self.name))
+            iter(value_list)
+        except: 
+            #Raises an error if the value_list is not iterable
+            raise ValueError(&#34;An iterable object has to be provided as list of values for the parameter &#39;{}&#39;&#34;
+                             .format(self.name))     
+
+
+# In[4]:
+
+
+class Population:
+    &#39;&#39;&#39;
+    The PoPulation class is the main class of the genetic algorithm
+    
+    Args:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        minimize (bool, default = True): True if the optimisation is a minimisation problem, False for maximisation (default: True)
+    
+    Attributes:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        stage (int): current evolution stage, set to 0
+        id_count (int): individual counter, used to generate ids, set to 0
+        reverse (bool): Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
+        param_names (list):list of the parameter names listed in the search space
+        param_dict (dict): dictionary of parameters generated from the search space list
+    
+    Methods:
+        get_random_param: randomly draws a new parameter value
+        get_initial_population: randomly generates a new population
+        evaluate_population: evaluates a population&#39;s fitness
+        sort_population: sort a population based on its fitness
+        natural_selection: selects the n best individuals of a population
+        get_offspring: generates offspring and appends them to the population
+        round_log: generates a log describing the evolution round&#39;s history
+        evolution: executes the evolution algorithm
+        fitness_overtime: plots the best population fitness by evolution round
+        network_genealogy: returns a networkx compatible genealogy
+        get_population_params: returns a list of the population&#39;s parameters
+        get_population_params_fitness: returns a list of the population&#39;s parameters and fitness
+        get_best_params: returns the best parameters of the population (based on fitness)
+    
+    Raises:
+        ValueError if an item of the search space list is not a member of the Integer, Real or Categorical class
+    &#39;&#39;&#39;
+    def __init__(self, pop_size, search_space, minimize = True):
+        self.pop_size = pop_size
+        self.population = []
+        self.stage = 0
+        self.id_count = 0
+        self.reverse = not minimize
+        try:
+            self.param_names = []
+            self.param_dict = {}
+            #Generates a list of parameter name and a parameter dictionary from the search space
+            for param in search_space:
+                self.param_names.append(param.name)
+                self.param_dict[param.name] = param
+        except:
+             raise ValueError(&#39;Please make sure that the search space is a list of Integer,                               Real or Categorical parameter&#39;)
+    
+    def get_random_param(self, param_name):
+        &#39;&#39;&#39;
+        Randomly draws a parameter value
+        
+        Args:
+            param_name (str): name of the parameter to be drawn
+        
+        Returns:
+            A random parameter value selected from the search space
+        &#39;&#39;&#39;
+        if self.param_dict[param_name].var_type==&#39;int&#39;:
+            return round(np.random.uniform(self.param_dict[param_name].lower_bound,
+                                           self.param_dict[param_name].upper_bound),0)
+        elif self.param_dict[param_name].var_type==&#39;real&#39;:
+            return np.random.uniform(self.param_dict[param_name].lower_bound,
+                                     self.param_dict[param_name].upper_bound)
+        elif self.param_dict[param_name].var_type==&#39;categorical&#39;:
+            return np.random.choice(self.param_dict[param_name].value_list)
+        else:
+            raise ValueError(&#39;Please make sure that the search space is a list of Integer(),                              Real() or Categorical() parameter&#39;)
+        
+    def get_initial_population(self):
+        &#39;&#39;&#39;
+        Randomly generates a population
+        &#39;&#39;&#39;
+        for idx in range(self.pop_size):
+            temp_params = {}
+            #Generates a random parameter value for each parameters in the parameter dictionary
+            for i, param in enumerate(self.param_dict.keys()):
+                temp_params[param] = self.get_random_param(param)
+            self.population.append(Individual(ind_id = self.id_count,
+                                              parent_id = None,    #no parent id as the population is generated
+                                              stage_init = self.stage, 
+                                              params = temp_params))
+            #Increments the id_count by 1 as a new individual has been generated
+            self.id_count +=1
+            
+    def evaluate_population(self,opt_function):
+        &#39;&#39;&#39;
+        Evaluates each of a population&#39;s individuals based on an optimisation function
+        
+        Args:
+            opt_function (function) - function to be optimised
+        
+        Note
+            To correctly define the optimisation function, please make sure that the following requirements are met:
+            1) The function requires a parameter dictionary as only required argument
+            2) The name of the dictionary keys expected by the function matches the parameter names
+              defined in the search space
+            3) The search space has been defined to avoid errors, or the function has been built to
+              handle them correctly
+            4) The function&#39;s execution should not generate errors
+        &#39;&#39;&#39;
+        for i,ind in enumerate(self.population):
+            #Only evaluates individuals with no fitness
+            #(i.e. that have not yet been evaluated)
+            if self.population[i].fitness==None:
+                self.population[i].get_fitness(opt_function)
+            else:
+                pass
+            
+    def sort_population(self):
+        &#39;&#39;&#39;
+        Sorts a population using its individual&#39;s fitness scores
+        
+        Note:
+            This score will be ascending or descending based on the chosen direction of the optimisation problem
+        &#39;&#39;&#39;
+        self.population = sorted(self.population, key=lambda ind: ind.fitness, reverse=self.reverse)
+        
+    def natural_selection(self):
+        &#39;&#39;&#39;
+        Selects the n best individuals of a population
+        This n is the population size
+        &#39;&#39;&#39;
+        self.sort_population()
+        self.population = self.population[:self.pop_size]
+        
+    def get_offspring(self, n_children, n_sample, p_mutation, p_crossover):
+        &#39;&#39;&#39;
+        Generates a list of offspring
+        
+        Args:
+            n_children (int): number of children
+            n_sample (int): number of candidate parents sampled from the population
+            p_mutation (float): mutation probability
+            p_crossover (float): crossover probability
+        &#39;&#39;&#39;
+        #Increments the evolution stage by 1
+        self.stage += 1
+        children = []
+        for child in range(n_children):
+            #Draws a random sample of candidates from the population
+            idx = np.random.randint(0, len(self.population), size=n_sample)
+            candidates = sorted([self.population[i] for i in idx], key=lambda ind: ind.fitness, reverse=self.reverse)
+            #Defines the best individual of the sample as parent 1
+            p1 = candidates.pop(0)
+            #Randomly selects parent 2 from the rest of the sample
+            p2 = candidates[np.random.randint(0, len(candidates))]
+            child_params = {}
+            for i, param in enumerate(self.param_dict.keys()):
+                #Theoretically speaking, mutation happens after crossover
+                #but if a cell is mutated after crossover, the crossover operation is redundant
+                #Mutation
+                if np.random.uniform(0,1) &lt; p_mutation:
+                    child_params[param] = self.get_random_param(param)
+                else:
+                    #Crossover
+                    if np.random.uniform(0,1) &gt; p_crossover:
+                        child_params[param] = p2.params[param]
+                    else:
+                        child_params[param] = p1.params[param]
+            child = Individual(ind_id = self.id_count, 
+                               parent_id = (p1.ind_id, p2.ind_id),
+                               stage_init = self.stage, 
+                               params = child_params)
+            children.append(child)
+            #Increments the id_count by 1 as a new individual has been generated
+            self.id_count+=1
+        self.population.extend(children)
+        
+    def round_log(self):
+        &#39;&#39;&#39;
+        Generates a round log, with a row for each individual id/stage combination
+        
+        Returns:
+             list: evolution round description
+        &#39;&#39;&#39;
+        round_log = []
+        for rank,individual in enumerate(self.population):
+            params_list = []
+            for param in individual.params.keys():
+                params_list.append(individual.params[param])
+            log_row = [str(self.stage) + &#39;_&#39; + str(individual.ind_id),    #stage_id individual identifier
+                       self.stage,                                        #current stage
+                       individual.ind_id,                                 #individual id
+                       individual.parent_id,                              #parents&#39; id
+                       individual.stage_init,                             #stage in which the individual was generated
+                       individual.fitness,                                #individual fitness
+                       rank+1]                                            #rank within population at this given stage
+            log_row.extend(params_list)                                   #list of parameter values
+            round_log.append(log_row)
+        return round_log
+    
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover):
+        &#39;&#39;&#39;
+        Executes the evolution algorithm for a set number of iterations
+        
+        Args:
+             opt_function (function): function to be optimised
+             n_rounds (int): number of evolution rounds
+             n_children (int): number of children
+             n_sample (int): number of candidate parents sampled from the population
+             p_mutation (float): mutation probability
+             p_crossover (float): crossover probability
+        
+        Returns:
+             dataframe: dataframe containing a summary of the evolution process, with a row by id/stage combination
+        &#39;&#39;&#39;
+        log_list = []
+        for i in range(n_rounds):
+            self.get_offspring(n_children, n_sample, p_mutation, p_crossover)
+            self.evaluate_population(opt_function)
+            self.sort_population()
+            log_list.extend(self.round_log())
+            self.natural_selection()
+        log_df = pd.DataFrame(data = log_list, columns=[&#39;index&#39;, &#39;stage&#39;, &#39;id&#39;, &#39;parent_id&#39;,
+                                                        &#39;stage_born&#39;, &#39;fitness&#39;, &#39;rank&#39;] + self.param_names)
+        log_df.set_index(&#39;index&#39;, inplace = True)
+        return log_df
+        
+    def fitness_overtime(self,log_df):
+        &#39;&#39;&#39;
+        Plots fitness over time
+        
+        Args:
+             dataframe: dataframe containing a summary of the evolution process
+        &#39;&#39;&#39;
+        log_df = log_df[log_df[&#39;rank&#39;]==1]
+        ax = log_df.plot(&#39;stage&#39;, &#39;fitness&#39;) 
+        ax.set_title(&#39;Fitness over time&#39;, fontsize = 20, pad=20)
+        ax.set_xlabel(&#39;Generation (Program Iteration)&#39;, fontsize=12)
+        ax.set_ylabel(&#39;Fitness&#39;, fontsize=12)
+        
+    def network_genealogy(self,log_df):
+        &#39;&#39;&#39;
+        Generates a networkX compatible genealogy in a pandas dataframe format
+        
+        Args:
+            log_df (dataframe): pandas dataframe containing a summary of the evolution process
+        
+        Returns:
+             dataframe: pandas dataframe convertible to a NetworkX graph
+        &#39;&#39;&#39;
+        pass
+    
+    def get_population_params(self):
+        &#39;&#39;&#39;
+        Generates a list of the population&#39;s parameters
+        
+        Returns:
+            list: a list of the poulation&#39;s individuals&#39; parameters
+        &#39;&#39;&#39;
+        param_list = []
+        for ind in self.population:
+            param_list.append(ind.params)
+        return param_list
+    
+    def get_population_params_fitness(self):
+        &#39;&#39;&#39;
+        Generates a list of the population&#39;s parameters and their associated fitness
+        
+        Returns
+            list: list of dictionaries containing each individual&#39;s parameters and fitness
+        &#39;&#39;&#39;
+        param_fitness = []
+        for ind in self.population:
+            param_fitness.append(
+                {&#39;parameters&#39;:ind.params, 
+                 &#39;fitness&#39;:ind.fitness}
+            )
+        return param_fitness
+    
+    def get_best_params(self):
+        &#39;&#39;&#39;
+        Outputs the best parameters of the population - i.e. the parameters of the population&#39;s first individual
+        &#39;&#39;&#39;
+        return self.population[0].params
+
+
+# In[1]:
+
+
+def optimise(function, search_space,
+             minimize=True, population_size=20,
+             n_rounds=500, n_children=10, 
+             n_sample=4, p_mutation=0.2, 
+             p_crossover=0.6, return_log = False, 
+             return_population = False):
+    
+    &#39;&#39;&#39;
+    Optimises a function given a search space
+    
+    Args:
+        function (function): function to be optimised
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        minimize (bool, default = True): nature of the optimsation objective
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+    
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
+    &#39;&#39;&#39;
+    
+    pop = Population(population_size, search_space=search_space, minimize = minimize)
+    pop.get_initial_population()
+    pop.evaluate_population(function)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    best_params = pop.get_best_params()  
+    print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
+    print(&#39;Best score: {}&#39;.format(pop.population[0].fitness))
+    print(&#39;Best parameters: {}&#39;.format(pop.population[0].params))
+    if return_log:
+        if return_population:
+            return best_params, run_log, pop
+        else:
+            return best_params, run_log
+    else:
+        return best_params
+
+
+# In[6]:
+
+
+def solve(function, target_value, search_space, population_size=10,
+             n_rounds=500, n_children=20, 
+             n_sample=4, p_mutation=0.2, 
+             p_crossover=0.6, return_log = False, 
+             return_population = False):
+    &#39;&#39;&#39;
+    Solves a function for a target value and a search space
+    
+    Args:
+        function (function): function to be optimised
+        target_value (float): function target value
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+     
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
+    &#39;&#39;&#39;
+    def absolute_error(params):
+        return abs(function(params)-target_value)
+    
+    pop = Population(population_size, search_space=search_space, minimize = True)
+    pop.get_initial_population()
+    pop.evaluate_population(absolute_error)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    best_params = pop.get_best_params()
+    print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
+    print(&#39;Lowest Absolute Error: {}&#39;.format(pop.population[0].fitness))
+    print(&#39;Best parameters: {}&#39;.format(pop.population[0].params))
+    if return_log:
+        if return_population:
+            return best_params, run_log, pop
+        else:
+            return best_params, run_log
+    else:
+        return best_params
+    
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="genetic.optimise"><code class="name flex">
+<span>def <span class="ident">optimise</span></span>(<span>function, search_space, minimize=True, population_size=20, n_rounds=500, n_children=10, n_sample=4, p_mutation=0.2, p_crossover=0.6, return_log=False, return_population=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Optimises a function given a search space</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>function</code></strong> :&ensp;<code>function</code></dt>
+<dd>function to be optimised</dd>
+<dt><strong><code>search_space</code></strong> :&ensp;<code>list</code></dt>
+<dd>list of parameters, either Integer, Real or Categorical</dd>
+<dt><strong><code>minimize</code></strong> :&ensp;<code>bool</code>, default <code>= True</code></dt>
+<dd>nature of the optimsation objective</dd>
+<dt><strong><code>population_size</code></strong> :&ensp;<code>int</code>, default <code>= 20</code></dt>
+<dd>size of the population, number of individuals</dd>
+<dt><strong><code>n_rounds</code></strong> :&ensp;<code>int</code>, default <code>= 500</code></dt>
+<dd>number of evolution rounds</dd>
+<dt><strong><code>n_children</code></strong> :&ensp;<code>int</code>, default <code>= 10</code></dt>
+<dd>number of children generated at each round</dd>
+<dt><strong><code>p_mutation</code></strong> :&ensp;<code>float</code>, default <code>= 0.2</code></dt>
+<dd>probability of mutation</dd>
+<dt><strong><code>p_crossover</code></strong> :&ensp;<code>float</code>, default <code>= 0.6</code></dt>
+<dd>probability of crossover - i.e. taking the gene from the dominant parent</dd>
+<dt><strong><code>return_log</code></strong> :&ensp;<code>bool</code>, default <code>= False</code></dt>
+<dd>returns an evolution log if true</dd>
+<dt><strong><code>return_population</code></strong> :&ensp;<code>bool</code>, default <code>= False</code></dt>
+<dd>returns a population object if true</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>parameters of the fittest individual after the final round of evolution</dd>
+<dt><code>dataframe</code>, optional</dt>
+<dd>dataframe containing a row for each individual id / stage combination</dd>
+<dt><code><a title="genetic.Population" href="#genetic.Population">Population</a></code>, optional</dt>
+<dd>Population object for customised analysis</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def optimise(function, search_space,
+             minimize=True, population_size=20,
+             n_rounds=500, n_children=10, 
+             n_sample=4, p_mutation=0.2, 
+             p_crossover=0.6, return_log = False, 
+             return_population = False):
+    
+    &#39;&#39;&#39;
+    Optimises a function given a search space
+    
+    Args:
+        function (function): function to be optimised
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        minimize (bool, default = True): nature of the optimsation objective
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+    
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
+    &#39;&#39;&#39;
+    
+    pop = Population(population_size, search_space=search_space, minimize = minimize)
+    pop.get_initial_population()
+    pop.evaluate_population(function)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    best_params = pop.get_best_params()  
+    print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
+    print(&#39;Best score: {}&#39;.format(pop.population[0].fitness))
+    print(&#39;Best parameters: {}&#39;.format(pop.population[0].params))
+    if return_log:
+        if return_population:
+            return best_params, run_log, pop
+        else:
+            return best_params, run_log
+    else:
+        return best_params</code></pre>
+</details>
+</dd>
+<dt id="genetic.solve"><code class="name flex">
+<span>def <span class="ident">solve</span></span>(<span>function, target_value, search_space, population_size=10, n_rounds=500, n_children=20, n_sample=4, p_mutation=0.2, p_crossover=0.6, return_log=False, return_population=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Solves a function for a target value and a search space</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>function</code></strong> :&ensp;<code>function</code></dt>
+<dd>function to be optimised</dd>
+<dt><strong><code>target_value</code></strong> :&ensp;<code>float</code></dt>
+<dd>function target value</dd>
+<dt><strong><code>search_space</code></strong> :&ensp;<code>list</code></dt>
+<dd>list of parameters, either Integer, Real or Categorical</dd>
+<dt><strong><code>population_size</code></strong> :&ensp;<code>int</code>, default <code>= 20</code></dt>
+<dd>size of the population, number of individuals</dd>
+<dt><strong><code>n_rounds</code></strong> :&ensp;<code>int</code>, default <code>= 500</code></dt>
+<dd>number of evolution rounds</dd>
+<dt><strong><code>n_children</code></strong> :&ensp;<code>int</code>, default <code>= 10</code></dt>
+<dd>number of children generated at each round</dd>
+<dt><strong><code>p_mutation</code></strong> :&ensp;<code>float</code>, default <code>= 0.2</code></dt>
+<dd>probability of mutation</dd>
+<dt><strong><code>p_crossover</code></strong> :&ensp;<code>float</code>, default <code>= 0.6</code></dt>
+<dd>probability of crossover - i.e. taking the gene from the dominant parent</dd>
+<dt><strong><code>return_log</code></strong> :&ensp;<code>bool</code>, default <code>= False</code></dt>
+<dd>returns an evolution log if true</dd>
+<dt><strong><code>return_population</code></strong> :&ensp;<code>bool</code>, default <code>= False</code></dt>
+<dd>returns a population object if true</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>parameters of the fittest individual after the final round of evolution</dd>
+<dt><code>dataframe</code>, optional</dt>
+<dd>dataframe containing a row for each individual id / stage combination</dd>
+<dt><code><a title="genetic.Population" href="#genetic.Population">Population</a></code>, optional</dt>
+<dd>Population object for customised analysis</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve(function, target_value, search_space, population_size=10,
+             n_rounds=500, n_children=20, 
+             n_sample=4, p_mutation=0.2, 
+             p_crossover=0.6, return_log = False, 
+             return_population = False):
+    &#39;&#39;&#39;
+    Solves a function for a target value and a search space
+    
+    Args:
+        function (function): function to be optimised
+        target_value (float): function target value
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+     
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
+    &#39;&#39;&#39;
+    def absolute_error(params):
+        return abs(function(params)-target_value)
+    
+    pop = Population(population_size, search_space=search_space, minimize = True)
+    pop.get_initial_population()
+    pop.evaluate_population(absolute_error)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    best_params = pop.get_best_params()
+    print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
+    print(&#39;Lowest Absolute Error: {}&#39;.format(pop.population[0].fitness))
+    print(&#39;Best parameters: {}&#39;.format(pop.population[0].params))
+    if return_log:
+        if return_population:
+            return best_params, run_log, pop
+        else:
+            return best_params, run_log
+    else:
+        return best_params</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="genetic.Categorical"><code class="flex name class">
+<span>class <span class="ident">Categorical</span></span>
+<span>(</span><span>value_list, name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Categorical Parameter class, member of the Search Space</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value_list</code></strong> :&ensp;<code>iterable</code></dt>
+<dd>list of possible values</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>value_list</code></strong> :&ensp;<code>iterable</code></dt>
+<dd>list of possible values</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+<dt><strong><code>var_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter type, used in the sampling process</dd>
+<dt><strong><code>check</code></strong> :&ensp;<code>str</code></dt>
+<dd>string 'parameter', used to check the integrity of the search space</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This parameter's name must be consistent with the keys of the dictionary
+fed into the optimised function</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError if the value list argument is not an iterable</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Categorical():
+    &#39;&#39;&#39;
+    Categorical Parameter class, member of the Search Space
+    
+    Args:
+        value_list (iterable): list of possible values
+        name (str): parameter name
+    
+    Attributes:
+        value_list (iterable): list of possible values
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the value list argument is not an iterable
+    &#39;&#39;&#39;
+    def __init__(self, value_list, name):
+        self.value_list = value_list
+        self.name = name
+        self.var_type = &#39;categorical&#39;
+        self.check = &#39;parameter&#39;
+        try:
+            if isinstance(value_list, str):
+                #Raises an error if the value_list is a string (separate check because strings are iterables...)
+                raise ValueError(&#34;The list of possible values for the parameter &#39;{}&#39; cannot be a string&#34;
+                                 .format(self.name))
+            iter(value_list)
+        except: 
+            #Raises an error if the value_list is not iterable
+            raise ValueError(&#34;An iterable object has to be provided as list of values for the parameter &#39;{}&#39;&#34;
+                             .format(self.name))     </code></pre>
+</details>
+</dd>
+<dt id="genetic.Individual"><code class="flex name class">
+<span>class <span class="ident">Individual</span></span>
+<span>(</span><span>ind_id, parent_id, stage_init, params)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Single individual in a population</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id_number</code></strong> :&ensp;<code>int</code></dt>
+<dd>identifier of the individual</dd>
+<dt><strong><code>parent_id</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>tuple containing the id of the two parents</dd>
+<dt><strong><code>stage_init</code></strong> :&ensp;<code>int</code></dt>
+<dd>stage in which the individual was generated</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>dictionary of parameters</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>ind_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>identifier of the individual</dd>
+<dt><strong><code>parent_id</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>tuple containing the id of the two parents</dd>
+<dt><strong><code>stage_init</code></strong> :&ensp;<code>int</code></dt>
+<dd>stage in which the individual was generated</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>dictionary of parameters</dd>
+<dt><strong><code>fitness</code></strong> :&ensp;<code>float</code></dt>
+<dd>fitness of the individual (default:None)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Individual:
+    &#39;&#39;&#39;
+    Single individual in a population
+    
+    Args:
+         id_number (int): identifier of the individual
+         parent_id (tuple): tuple containing the id of the two parents
+         stage_init (int): stage in which the individual was generated
+         params (dict): dictionary of parameters
+    
+    Attributes:
+        ind_id (int): identifier of the individual
+        parent_id (tuple): tuple containing the id of the two parents
+        stage_init (int): stage in which the individual was generated
+        params (dict): dictionary of parameters
+        fitness (float): fitness of the individual (default:None)
+    &#39;&#39;&#39;
+    def __init__(self, ind_id, parent_id, stage_init, params):
+        self.ind_id = ind_id
+        self.parent_id = parent_id
+        self.stage_init = stage_init
+        self.params = params
+        self.fitness = None
+    def get_fitness(self,opt_function):
+        &#39;&#39;&#39;
+        Evaluates an individual&#39;s fitness based on its parameters and a function
+        
+        Args:
+            function (function): user-selected function to be optimised
+        
+        Note:
+            This function must take a dictionary as argument. 
+            This dictionary&#39;s keys must match the search space&#39;s parameter name
+        
+        Raises:
+            ValueError if fitness cannot be evaluated for a given individual
+        &#39;&#39;&#39;
+        try:
+            self.fitness = opt_function(self.params)
+        except:
+            raise ValueError(&#34;An error occurred while evaluating Individual {ind_id}&#39;s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function&#39;s execution should not generate errors&#34;.format(ind_id = self.ind_id, params = self.params))</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="genetic.Individual.get_fitness"><code class="name flex">
+<span>def <span class="ident">get_fitness</span></span>(<span>self, opt_function)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Evaluates an individual's fitness based on its parameters and a function</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>function</code></strong> :&ensp;<code>function</code></dt>
+<dd>user-selected function to be optimised</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This function must take a dictionary as argument.
+This dictionary's keys must match the search space's parameter name</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError if fitness cannot be evaluated for a given individual</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_fitness(self,opt_function):
+    &#39;&#39;&#39;
+    Evaluates an individual&#39;s fitness based on its parameters and a function
+    
+    Args:
+        function (function): user-selected function to be optimised
+    
+    Note:
+        This function must take a dictionary as argument. 
+        This dictionary&#39;s keys must match the search space&#39;s parameter name
+    
+    Raises:
+        ValueError if fitness cannot be evaluated for a given individual
+    &#39;&#39;&#39;
+    try:
+        self.fitness = opt_function(self.params)
+    except:
+        raise ValueError(&#34;An error occurred while evaluating Individual {ind_id}&#39;s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function&#39;s execution should not generate errors&#34;.format(ind_id = self.ind_id, params = self.params))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="genetic.Integer"><code class="flex name class">
+<span>class <span class="ident">Integer</span></span>
+<span>(</span><span>lower_bound, upper_bound, name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Integer Parameter class, member of the Search Space</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>lower_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space lower bound</dd>
+<dt><strong><code>upper_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space upper bound</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>lower_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space lower bound</dd>
+<dt><strong><code>upper_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space upper bound</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+<dt><strong><code>var_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter type, used in the sampling process</dd>
+<dt><strong><code>check</code></strong> :&ensp;<code>str</code></dt>
+<dd>string 'parameter', used to check the integrity of the search space</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This parameter's name must be consistent with the keys of the dictionary
+fed into the optimised function</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError if the lower bound is superior</code> or <code>equal to the lower bound</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Integer():
+    &#39;&#39;&#39;
+    Integer Parameter class, member of the Search Space
+    
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+    
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+     
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
+    &#39;&#39;&#39;
+    def __init__(self, lower_bound, upper_bound, name):
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        self.name = name
+        self.var_type = &#39;int&#39;
+        self.check = &#39;parameter&#39;
+        if self.lower_bound &gt;= self.upper_bound:
+            raise ValueError(&#34;the lower bound {} has to be less than the&#34;
+                             &#34; upper bound {}&#34;.format(lower_bound, upper_bound))
+        else:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population"><code class="flex name class">
+<span>class <span class="ident">Population</span></span>
+<span>(</span><span>pop_size, search_space, minimize=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The PoPulation class is the main class of the genetic algorithm</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pop_size</code></strong> :&ensp;<code>int</code></dt>
+<dd>size of the population</dd>
+<dt><strong><code>search_space</code></strong> :&ensp;<code>list</code></dt>
+<dd>list of parameters initialised with the Integer, Real or Categorical classes defined above</dd>
+<dt><strong><code>minimize</code></strong> :&ensp;<code>bool</code>, default <code>= True</code></dt>
+<dd>True if the optimisation is a minimisation problem, False for maximisation (default: True)</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>pop_size</code></strong> :&ensp;<code>int</code></dt>
+<dd>size of the population</dd>
+<dt><strong><code>search_space</code></strong> :&ensp;<code>list</code></dt>
+<dd>list of parameters initialised with the Integer, Real or Categorical classes defined above</dd>
+<dt><strong><code>stage</code></strong> :&ensp;<code>int</code></dt>
+<dd>current evolution stage, set to 0</dd>
+<dt><strong><code>id_count</code></strong> :&ensp;<code>int</code></dt>
+<dd>individual counter, used to generate ids, set to 0</dd>
+<dt><strong><code>reverse</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)</dd>
+<dt>param_names (list):list of the parameter names listed in the search space</dt>
+<dt><strong><code>param_dict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>dictionary of parameters generated from the search space list</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p>get_random_param: randomly draws a new parameter value
+get_initial_population: randomly generates a new population
+evaluate_population: evaluates a population's fitness
+sort_population: sort a population based on its fitness
+natural_selection: selects the n best individuals of a population
+get_offspring: generates offspring and appends them to the population
+round_log: generates a log describing the evolution round's history
+evolution: executes the evolution algorithm
+fitness_overtime: plots the best population fitness by evolution round
+network_genealogy: returns a networkx compatible genealogy
+get_population_params: returns a list of the population's parameters
+get_population_params_fitness: returns a list of the population's parameters and fitness
+get_best_params: returns the best parameters of the population (based on fitness)</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError if an item</code> of <code>the search space list is not a member</code> of <code>the <a title="genetic.Integer" href="#genetic.Integer">Integer</a>, <a title="genetic.Real" href="#genetic.Real">Real</a></code> or <code><a title="genetic.Categorical" href="#genetic.Categorical">Categorical</a> class</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Population:
+    &#39;&#39;&#39;
+    The PoPulation class is the main class of the genetic algorithm
+    
+    Args:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        minimize (bool, default = True): True if the optimisation is a minimisation problem, False for maximisation (default: True)
+    
+    Attributes:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        stage (int): current evolution stage, set to 0
+        id_count (int): individual counter, used to generate ids, set to 0
+        reverse (bool): Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
+        param_names (list):list of the parameter names listed in the search space
+        param_dict (dict): dictionary of parameters generated from the search space list
+    
+    Methods:
+        get_random_param: randomly draws a new parameter value
+        get_initial_population: randomly generates a new population
+        evaluate_population: evaluates a population&#39;s fitness
+        sort_population: sort a population based on its fitness
+        natural_selection: selects the n best individuals of a population
+        get_offspring: generates offspring and appends them to the population
+        round_log: generates a log describing the evolution round&#39;s history
+        evolution: executes the evolution algorithm
+        fitness_overtime: plots the best population fitness by evolution round
+        network_genealogy: returns a networkx compatible genealogy
+        get_population_params: returns a list of the population&#39;s parameters
+        get_population_params_fitness: returns a list of the population&#39;s parameters and fitness
+        get_best_params: returns the best parameters of the population (based on fitness)
+    
+    Raises:
+        ValueError if an item of the search space list is not a member of the Integer, Real or Categorical class
+    &#39;&#39;&#39;
+    def __init__(self, pop_size, search_space, minimize = True):
+        self.pop_size = pop_size
+        self.population = []
+        self.stage = 0
+        self.id_count = 0
+        self.reverse = not minimize
+        try:
+            self.param_names = []
+            self.param_dict = {}
+            #Generates a list of parameter name and a parameter dictionary from the search space
+            for param in search_space:
+                self.param_names.append(param.name)
+                self.param_dict[param.name] = param
+        except:
+             raise ValueError(&#39;Please make sure that the search space is a list of Integer,                               Real or Categorical parameter&#39;)
+    
+    def get_random_param(self, param_name):
+        &#39;&#39;&#39;
+        Randomly draws a parameter value
+        
+        Args:
+            param_name (str): name of the parameter to be drawn
+        
+        Returns:
+            A random parameter value selected from the search space
+        &#39;&#39;&#39;
+        if self.param_dict[param_name].var_type==&#39;int&#39;:
+            return round(np.random.uniform(self.param_dict[param_name].lower_bound,
+                                           self.param_dict[param_name].upper_bound),0)
+        elif self.param_dict[param_name].var_type==&#39;real&#39;:
+            return np.random.uniform(self.param_dict[param_name].lower_bound,
+                                     self.param_dict[param_name].upper_bound)
+        elif self.param_dict[param_name].var_type==&#39;categorical&#39;:
+            return np.random.choice(self.param_dict[param_name].value_list)
+        else:
+            raise ValueError(&#39;Please make sure that the search space is a list of Integer(),                              Real() or Categorical() parameter&#39;)
+        
+    def get_initial_population(self):
+        &#39;&#39;&#39;
+        Randomly generates a population
+        &#39;&#39;&#39;
+        for idx in range(self.pop_size):
+            temp_params = {}
+            #Generates a random parameter value for each parameters in the parameter dictionary
+            for i, param in enumerate(self.param_dict.keys()):
+                temp_params[param] = self.get_random_param(param)
+            self.population.append(Individual(ind_id = self.id_count,
+                                              parent_id = None,    #no parent id as the population is generated
+                                              stage_init = self.stage, 
+                                              params = temp_params))
+            #Increments the id_count by 1 as a new individual has been generated
+            self.id_count +=1
+            
+    def evaluate_population(self,opt_function):
+        &#39;&#39;&#39;
+        Evaluates each of a population&#39;s individuals based on an optimisation function
+        
+        Args:
+            opt_function (function) - function to be optimised
+        
+        Note
+            To correctly define the optimisation function, please make sure that the following requirements are met:
+            1) The function requires a parameter dictionary as only required argument
+            2) The name of the dictionary keys expected by the function matches the parameter names
+              defined in the search space
+            3) The search space has been defined to avoid errors, or the function has been built to
+              handle them correctly
+            4) The function&#39;s execution should not generate errors
+        &#39;&#39;&#39;
+        for i,ind in enumerate(self.population):
+            #Only evaluates individuals with no fitness
+            #(i.e. that have not yet been evaluated)
+            if self.population[i].fitness==None:
+                self.population[i].get_fitness(opt_function)
+            else:
+                pass
+            
+    def sort_population(self):
+        &#39;&#39;&#39;
+        Sorts a population using its individual&#39;s fitness scores
+        
+        Note:
+            This score will be ascending or descending based on the chosen direction of the optimisation problem
+        &#39;&#39;&#39;
+        self.population = sorted(self.population, key=lambda ind: ind.fitness, reverse=self.reverse)
+        
+    def natural_selection(self):
+        &#39;&#39;&#39;
+        Selects the n best individuals of a population
+        This n is the population size
+        &#39;&#39;&#39;
+        self.sort_population()
+        self.population = self.population[:self.pop_size]
+        
+    def get_offspring(self, n_children, n_sample, p_mutation, p_crossover):
+        &#39;&#39;&#39;
+        Generates a list of offspring
+        
+        Args:
+            n_children (int): number of children
+            n_sample (int): number of candidate parents sampled from the population
+            p_mutation (float): mutation probability
+            p_crossover (float): crossover probability
+        &#39;&#39;&#39;
+        #Increments the evolution stage by 1
+        self.stage += 1
+        children = []
+        for child in range(n_children):
+            #Draws a random sample of candidates from the population
+            idx = np.random.randint(0, len(self.population), size=n_sample)
+            candidates = sorted([self.population[i] for i in idx], key=lambda ind: ind.fitness, reverse=self.reverse)
+            #Defines the best individual of the sample as parent 1
+            p1 = candidates.pop(0)
+            #Randomly selects parent 2 from the rest of the sample
+            p2 = candidates[np.random.randint(0, len(candidates))]
+            child_params = {}
+            for i, param in enumerate(self.param_dict.keys()):
+                #Theoretically speaking, mutation happens after crossover
+                #but if a cell is mutated after crossover, the crossover operation is redundant
+                #Mutation
+                if np.random.uniform(0,1) &lt; p_mutation:
+                    child_params[param] = self.get_random_param(param)
+                else:
+                    #Crossover
+                    if np.random.uniform(0,1) &gt; p_crossover:
+                        child_params[param] = p2.params[param]
+                    else:
+                        child_params[param] = p1.params[param]
+            child = Individual(ind_id = self.id_count, 
+                               parent_id = (p1.ind_id, p2.ind_id),
+                               stage_init = self.stage, 
+                               params = child_params)
+            children.append(child)
+            #Increments the id_count by 1 as a new individual has been generated
+            self.id_count+=1
+        self.population.extend(children)
+        
+    def round_log(self):
+        &#39;&#39;&#39;
+        Generates a round log, with a row for each individual id/stage combination
+        
+        Returns:
+             list: evolution round description
+        &#39;&#39;&#39;
+        round_log = []
+        for rank,individual in enumerate(self.population):
+            params_list = []
+            for param in individual.params.keys():
+                params_list.append(individual.params[param])
+            log_row = [str(self.stage) + &#39;_&#39; + str(individual.ind_id),    #stage_id individual identifier
+                       self.stage,                                        #current stage
+                       individual.ind_id,                                 #individual id
+                       individual.parent_id,                              #parents&#39; id
+                       individual.stage_init,                             #stage in which the individual was generated
+                       individual.fitness,                                #individual fitness
+                       rank+1]                                            #rank within population at this given stage
+            log_row.extend(params_list)                                   #list of parameter values
+            round_log.append(log_row)
+        return round_log
+    
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover):
+        &#39;&#39;&#39;
+        Executes the evolution algorithm for a set number of iterations
+        
+        Args:
+             opt_function (function): function to be optimised
+             n_rounds (int): number of evolution rounds
+             n_children (int): number of children
+             n_sample (int): number of candidate parents sampled from the population
+             p_mutation (float): mutation probability
+             p_crossover (float): crossover probability
+        
+        Returns:
+             dataframe: dataframe containing a summary of the evolution process, with a row by id/stage combination
+        &#39;&#39;&#39;
+        log_list = []
+        for i in range(n_rounds):
+            self.get_offspring(n_children, n_sample, p_mutation, p_crossover)
+            self.evaluate_population(opt_function)
+            self.sort_population()
+            log_list.extend(self.round_log())
+            self.natural_selection()
+        log_df = pd.DataFrame(data = log_list, columns=[&#39;index&#39;, &#39;stage&#39;, &#39;id&#39;, &#39;parent_id&#39;,
+                                                        &#39;stage_born&#39;, &#39;fitness&#39;, &#39;rank&#39;] + self.param_names)
+        log_df.set_index(&#39;index&#39;, inplace = True)
+        return log_df
+        
+    def fitness_overtime(self,log_df):
+        &#39;&#39;&#39;
+        Plots fitness over time
+        
+        Args:
+             dataframe: dataframe containing a summary of the evolution process
+        &#39;&#39;&#39;
+        log_df = log_df[log_df[&#39;rank&#39;]==1]
+        ax = log_df.plot(&#39;stage&#39;, &#39;fitness&#39;) 
+        ax.set_title(&#39;Fitness over time&#39;, fontsize = 20, pad=20)
+        ax.set_xlabel(&#39;Generation (Program Iteration)&#39;, fontsize=12)
+        ax.set_ylabel(&#39;Fitness&#39;, fontsize=12)
+        
+    def network_genealogy(self,log_df):
+        &#39;&#39;&#39;
+        Generates a networkX compatible genealogy in a pandas dataframe format
+        
+        Args:
+            log_df (dataframe): pandas dataframe containing a summary of the evolution process
+        
+        Returns:
+             dataframe: pandas dataframe convertible to a NetworkX graph
+        &#39;&#39;&#39;
+        pass
+    
+    def get_population_params(self):
+        &#39;&#39;&#39;
+        Generates a list of the population&#39;s parameters
+        
+        Returns:
+            list: a list of the poulation&#39;s individuals&#39; parameters
+        &#39;&#39;&#39;
+        param_list = []
+        for ind in self.population:
+            param_list.append(ind.params)
+        return param_list
+    
+    def get_population_params_fitness(self):
+        &#39;&#39;&#39;
+        Generates a list of the population&#39;s parameters and their associated fitness
+        
+        Returns
+            list: list of dictionaries containing each individual&#39;s parameters and fitness
+        &#39;&#39;&#39;
+        param_fitness = []
+        for ind in self.population:
+            param_fitness.append(
+                {&#39;parameters&#39;:ind.params, 
+                 &#39;fitness&#39;:ind.fitness}
+            )
+        return param_fitness
+    
+    def get_best_params(self):
+        &#39;&#39;&#39;
+        Outputs the best parameters of the population - i.e. the parameters of the population&#39;s first individual
+        &#39;&#39;&#39;
+        return self.population[0].params</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="genetic.Population.evaluate_population"><code class="name flex">
+<span>def <span class="ident">evaluate_population</span></span>(<span>self, opt_function)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Evaluates each of a population's individuals based on an optimisation function</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>opt_function (function) - function to be optimised</dt>
+<dt><strong><code>Note</code></strong></dt>
+<dd>To correctly define the optimisation function, please make sure that the following requirements are met:
+1) The function requires a parameter dictionary as only required argument
+2) The name of the dictionary keys expected by the function matches the parameter names
+defined in the search space
+3) The search space has been defined to avoid errors, or the function has been built to
+handle them correctly
+4) The function's execution should not generate errors</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evaluate_population(self,opt_function):
+    &#39;&#39;&#39;
+    Evaluates each of a population&#39;s individuals based on an optimisation function
+    
+    Args:
+        opt_function (function) - function to be optimised
+    
+    Note
+        To correctly define the optimisation function, please make sure that the following requirements are met:
+        1) The function requires a parameter dictionary as only required argument
+        2) The name of the dictionary keys expected by the function matches the parameter names
+          defined in the search space
+        3) The search space has been defined to avoid errors, or the function has been built to
+          handle them correctly
+        4) The function&#39;s execution should not generate errors
+    &#39;&#39;&#39;
+    for i,ind in enumerate(self.population):
+        #Only evaluates individuals with no fitness
+        #(i.e. that have not yet been evaluated)
+        if self.population[i].fitness==None:
+            self.population[i].get_fitness(opt_function)
+        else:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.evolution"><code class="name flex">
+<span>def <span class="ident">evolution</span></span>(<span>self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Executes the evolution algorithm for a set number of iterations</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>opt_function</code></strong> :&ensp;<code>function</code></dt>
+<dd>function to be optimised</dd>
+<dt><strong><code>n_rounds</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of evolution rounds</dd>
+<dt><strong><code>n_children</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of children</dd>
+<dt><strong><code>n_sample</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of candidate parents sampled from the population</dd>
+<dt><strong><code>p_mutation</code></strong> :&ensp;<code>float</code></dt>
+<dd>mutation probability</dd>
+<dt><strong><code>p_crossover</code></strong> :&ensp;<code>float</code></dt>
+<dd>crossover probability</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dataframe</code></dt>
+<dd>dataframe containing a summary of the evolution process, with a row by id/stage combination</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover):
+    &#39;&#39;&#39;
+    Executes the evolution algorithm for a set number of iterations
+    
+    Args:
+         opt_function (function): function to be optimised
+         n_rounds (int): number of evolution rounds
+         n_children (int): number of children
+         n_sample (int): number of candidate parents sampled from the population
+         p_mutation (float): mutation probability
+         p_crossover (float): crossover probability
+    
+    Returns:
+         dataframe: dataframe containing a summary of the evolution process, with a row by id/stage combination
+    &#39;&#39;&#39;
+    log_list = []
+    for i in range(n_rounds):
+        self.get_offspring(n_children, n_sample, p_mutation, p_crossover)
+        self.evaluate_population(opt_function)
+        self.sort_population()
+        log_list.extend(self.round_log())
+        self.natural_selection()
+    log_df = pd.DataFrame(data = log_list, columns=[&#39;index&#39;, &#39;stage&#39;, &#39;id&#39;, &#39;parent_id&#39;,
+                                                    &#39;stage_born&#39;, &#39;fitness&#39;, &#39;rank&#39;] + self.param_names)
+    log_df.set_index(&#39;index&#39;, inplace = True)
+    return log_df</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.fitness_overtime"><code class="name flex">
+<span>def <span class="ident">fitness_overtime</span></span>(<span>self, log_df)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plots fitness over time</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>dataframe</code></strong></dt>
+<dd>dataframe containing a summary of the evolution process</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fitness_overtime(self,log_df):
+    &#39;&#39;&#39;
+    Plots fitness over time
+    
+    Args:
+         dataframe: dataframe containing a summary of the evolution process
+    &#39;&#39;&#39;
+    log_df = log_df[log_df[&#39;rank&#39;]==1]
+    ax = log_df.plot(&#39;stage&#39;, &#39;fitness&#39;) 
+    ax.set_title(&#39;Fitness over time&#39;, fontsize = 20, pad=20)
+    ax.set_xlabel(&#39;Generation (Program Iteration)&#39;, fontsize=12)
+    ax.set_ylabel(&#39;Fitness&#39;, fontsize=12)</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_best_params"><code class="name flex">
+<span>def <span class="ident">get_best_params</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Outputs the best parameters of the population - i.e. the parameters of the population's first individual</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_best_params(self):
+    &#39;&#39;&#39;
+    Outputs the best parameters of the population - i.e. the parameters of the population&#39;s first individual
+    &#39;&#39;&#39;
+    return self.population[0].params</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_initial_population"><code class="name flex">
+<span>def <span class="ident">get_initial_population</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Randomly generates a population</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_initial_population(self):
+    &#39;&#39;&#39;
+    Randomly generates a population
+    &#39;&#39;&#39;
+    for idx in range(self.pop_size):
+        temp_params = {}
+        #Generates a random parameter value for each parameters in the parameter dictionary
+        for i, param in enumerate(self.param_dict.keys()):
+            temp_params[param] = self.get_random_param(param)
+        self.population.append(Individual(ind_id = self.id_count,
+                                          parent_id = None,    #no parent id as the population is generated
+                                          stage_init = self.stage, 
+                                          params = temp_params))
+        #Increments the id_count by 1 as a new individual has been generated
+        self.id_count +=1</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_offspring"><code class="name flex">
+<span>def <span class="ident">get_offspring</span></span>(<span>self, n_children, n_sample, p_mutation, p_crossover)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a list of offspring</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>n_children</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of children</dd>
+<dt><strong><code>n_sample</code></strong> :&ensp;<code>int</code></dt>
+<dd>number of candidate parents sampled from the population</dd>
+<dt><strong><code>p_mutation</code></strong> :&ensp;<code>float</code></dt>
+<dd>mutation probability</dd>
+<dt><strong><code>p_crossover</code></strong> :&ensp;<code>float</code></dt>
+<dd>crossover probability</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_offspring(self, n_children, n_sample, p_mutation, p_crossover):
+    &#39;&#39;&#39;
+    Generates a list of offspring
+    
+    Args:
+        n_children (int): number of children
+        n_sample (int): number of candidate parents sampled from the population
+        p_mutation (float): mutation probability
+        p_crossover (float): crossover probability
+    &#39;&#39;&#39;
+    #Increments the evolution stage by 1
+    self.stage += 1
+    children = []
+    for child in range(n_children):
+        #Draws a random sample of candidates from the population
+        idx = np.random.randint(0, len(self.population), size=n_sample)
+        candidates = sorted([self.population[i] for i in idx], key=lambda ind: ind.fitness, reverse=self.reverse)
+        #Defines the best individual of the sample as parent 1
+        p1 = candidates.pop(0)
+        #Randomly selects parent 2 from the rest of the sample
+        p2 = candidates[np.random.randint(0, len(candidates))]
+        child_params = {}
+        for i, param in enumerate(self.param_dict.keys()):
+            #Theoretically speaking, mutation happens after crossover
+            #but if a cell is mutated after crossover, the crossover operation is redundant
+            #Mutation
+            if np.random.uniform(0,1) &lt; p_mutation:
+                child_params[param] = self.get_random_param(param)
+            else:
+                #Crossover
+                if np.random.uniform(0,1) &gt; p_crossover:
+                    child_params[param] = p2.params[param]
+                else:
+                    child_params[param] = p1.params[param]
+        child = Individual(ind_id = self.id_count, 
+                           parent_id = (p1.ind_id, p2.ind_id),
+                           stage_init = self.stage, 
+                           params = child_params)
+        children.append(child)
+        #Increments the id_count by 1 as a new individual has been generated
+        self.id_count+=1
+    self.population.extend(children)</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_population_params"><code class="name flex">
+<span>def <span class="ident">get_population_params</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a list of the population's parameters</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>a list of the poulation's individuals' parameters</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_population_params(self):
+    &#39;&#39;&#39;
+    Generates a list of the population&#39;s parameters
+    
+    Returns:
+        list: a list of the poulation&#39;s individuals&#39; parameters
+    &#39;&#39;&#39;
+    param_list = []
+    for ind in self.population:
+        param_list.append(ind.params)
+    return param_list</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_population_params_fitness"><code class="name flex">
+<span>def <span class="ident">get_population_params_fitness</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a list of the population's parameters and their associated fitness</p>
+<p>Returns
+list: list of dictionaries containing each individual's parameters and fitness</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_population_params_fitness(self):
+    &#39;&#39;&#39;
+    Generates a list of the population&#39;s parameters and their associated fitness
+    
+    Returns
+        list: list of dictionaries containing each individual&#39;s parameters and fitness
+    &#39;&#39;&#39;
+    param_fitness = []
+    for ind in self.population:
+        param_fitness.append(
+            {&#39;parameters&#39;:ind.params, 
+             &#39;fitness&#39;:ind.fitness}
+        )
+    return param_fitness</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.get_random_param"><code class="name flex">
+<span>def <span class="ident">get_random_param</span></span>(<span>self, param_name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Randomly draws a parameter value</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>param_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>name of the parameter to be drawn</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A random parameter value selected from the search space</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_random_param(self, param_name):
+    &#39;&#39;&#39;
+    Randomly draws a parameter value
+    
+    Args:
+        param_name (str): name of the parameter to be drawn
+    
+    Returns:
+        A random parameter value selected from the search space
+    &#39;&#39;&#39;
+    if self.param_dict[param_name].var_type==&#39;int&#39;:
+        return round(np.random.uniform(self.param_dict[param_name].lower_bound,
+                                       self.param_dict[param_name].upper_bound),0)
+    elif self.param_dict[param_name].var_type==&#39;real&#39;:
+        return np.random.uniform(self.param_dict[param_name].lower_bound,
+                                 self.param_dict[param_name].upper_bound)
+    elif self.param_dict[param_name].var_type==&#39;categorical&#39;:
+        return np.random.choice(self.param_dict[param_name].value_list)
+    else:
+        raise ValueError(&#39;Please make sure that the search space is a list of Integer(),                              Real() or Categorical() parameter&#39;)</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.natural_selection"><code class="name flex">
+<span>def <span class="ident">natural_selection</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Selects the n best individuals of a population
+This n is the population size</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def natural_selection(self):
+    &#39;&#39;&#39;
+    Selects the n best individuals of a population
+    This n is the population size
+    &#39;&#39;&#39;
+    self.sort_population()
+    self.population = self.population[:self.pop_size]</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.network_genealogy"><code class="name flex">
+<span>def <span class="ident">network_genealogy</span></span>(<span>self, log_df)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a networkX compatible genealogy in a pandas dataframe format</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>log_df</code></strong> :&ensp;<code>dataframe</code></dt>
+<dd>pandas dataframe containing a summary of the evolution process</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dataframe</code></dt>
+<dd>pandas dataframe convertible to a NetworkX graph</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def network_genealogy(self,log_df):
+    &#39;&#39;&#39;
+    Generates a networkX compatible genealogy in a pandas dataframe format
+    
+    Args:
+        log_df (dataframe): pandas dataframe containing a summary of the evolution process
+    
+    Returns:
+         dataframe: pandas dataframe convertible to a NetworkX graph
+    &#39;&#39;&#39;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.round_log"><code class="name flex">
+<span>def <span class="ident">round_log</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a round log, with a row for each individual id/stage combination</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>evolution round description</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def round_log(self):
+    &#39;&#39;&#39;
+    Generates a round log, with a row for each individual id/stage combination
+    
+    Returns:
+         list: evolution round description
+    &#39;&#39;&#39;
+    round_log = []
+    for rank,individual in enumerate(self.population):
+        params_list = []
+        for param in individual.params.keys():
+            params_list.append(individual.params[param])
+        log_row = [str(self.stage) + &#39;_&#39; + str(individual.ind_id),    #stage_id individual identifier
+                   self.stage,                                        #current stage
+                   individual.ind_id,                                 #individual id
+                   individual.parent_id,                              #parents&#39; id
+                   individual.stage_init,                             #stage in which the individual was generated
+                   individual.fitness,                                #individual fitness
+                   rank+1]                                            #rank within population at this given stage
+        log_row.extend(params_list)                                   #list of parameter values
+        round_log.append(log_row)
+    return round_log</code></pre>
+</details>
+</dd>
+<dt id="genetic.Population.sort_population"><code class="name flex">
+<span>def <span class="ident">sort_population</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sorts a population using its individual's fitness scores</p>
+<h2 id="note">Note</h2>
+<p>This score will be ascending or descending based on the chosen direction of the optimisation problem</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sort_population(self):
+    &#39;&#39;&#39;
+    Sorts a population using its individual&#39;s fitness scores
+    
+    Note:
+        This score will be ascending or descending based on the chosen direction of the optimisation problem
+    &#39;&#39;&#39;
+    self.population = sorted(self.population, key=lambda ind: ind.fitness, reverse=self.reverse)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="genetic.Real"><code class="flex name class">
+<span>class <span class="ident">Real</span></span>
+<span>(</span><span>lower_bound, upper_bound, name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Real Parameter class, member of the Search Space</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>lower_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space lower bound</dd>
+<dt><strong><code>upper_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space upper bound</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>lower_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space lower bound</dd>
+<dt><strong><code>upper_bound</code></strong> :&ensp;<code>int</code></dt>
+<dd>parameter space upper bound</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter name</dd>
+<dt><strong><code>var_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>parameter type, used in the sampling process</dd>
+<dt><strong><code>check</code></strong> :&ensp;<code>str</code></dt>
+<dd>string 'parameter', used to check the integrity of the search space</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This parameter's name must be consistent with the keys of the dictionary
+fed into the optimised function</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError if the lower bound is superior</code> or <code>equal to the lower bound</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Real():
+    &#39;&#39;&#39;
+    Real Parameter class, member of the Search Space
+    
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+    
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string &#39;parameter&#39;, used to check the integrity of the search space
+    
+    Note:
+        This parameter&#39;s name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
+    &#39;&#39;&#39;
+    def __init__(self, lower_bound, upper_bound, name):
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        self.name = name
+        self.var_type = &#39;real&#39;
+        self.check = &#39;parameter&#39;
+        if self.lower_bound &gt;= self.upper_bound:
+            raise ValueError(&#34;the lower bound {} has to be less than the&#34;
+                             &#34; upper bound {}&#34;.format(lower_bound, upper_bound))
+        else:
+            pass</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="genetic.optimise" href="#genetic.optimise">optimise</a></code></li>
+<li><code><a title="genetic.solve" href="#genetic.solve">solve</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="genetic.Categorical" href="#genetic.Categorical">Categorical</a></code></h4>
+</li>
+<li>
+<h4><code><a title="genetic.Individual" href="#genetic.Individual">Individual</a></code></h4>
+<ul class="">
+<li><code><a title="genetic.Individual.get_fitness" href="#genetic.Individual.get_fitness">get_fitness</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="genetic.Integer" href="#genetic.Integer">Integer</a></code></h4>
+</li>
+<li>
+<h4><code><a title="genetic.Population" href="#genetic.Population">Population</a></code></h4>
+<ul class="">
+<li><code><a title="genetic.Population.evaluate_population" href="#genetic.Population.evaluate_population">evaluate_population</a></code></li>
+<li><code><a title="genetic.Population.evolution" href="#genetic.Population.evolution">evolution</a></code></li>
+<li><code><a title="genetic.Population.fitness_overtime" href="#genetic.Population.fitness_overtime">fitness_overtime</a></code></li>
+<li><code><a title="genetic.Population.get_best_params" href="#genetic.Population.get_best_params">get_best_params</a></code></li>
+<li><code><a title="genetic.Population.get_initial_population" href="#genetic.Population.get_initial_population">get_initial_population</a></code></li>
+<li><code><a title="genetic.Population.get_offspring" href="#genetic.Population.get_offspring">get_offspring</a></code></li>
+<li><code><a title="genetic.Population.get_population_params" href="#genetic.Population.get_population_params">get_population_params</a></code></li>
+<li><code><a title="genetic.Population.get_population_params_fitness" href="#genetic.Population.get_population_params_fitness">get_population_params_fitness</a></code></li>
+<li><code><a title="genetic.Population.get_random_param" href="#genetic.Population.get_random_param">get_random_param</a></code></li>
+<li><code><a title="genetic.Population.natural_selection" href="#genetic.Population.natural_selection">natural_selection</a></code></li>
+<li><code><a title="genetic.Population.network_genealogy" href="#genetic.Population.network_genealogy">network_genealogy</a></code></li>
+<li><code><a title="genetic.Population.round_log" href="#genetic.Population.round_log">round_log</a></code></li>
+<li><code><a title="genetic.Population.sort_population" href="#genetic.Population.sort_population">sort_population</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="genetic.Real" href="#genetic.Real">Real</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

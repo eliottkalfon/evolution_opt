@@ -14,6 +14,55 @@
 # 4) Plateau Avoidance <br>
 # 5) Crowding Distance <br>
 
+# In[ ]:
+
+
+'''
+This module is a Python implementation of a genetic algorithm with a regularized evolution process.
+It was inspired by the following paper:
+    Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
+    International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+
+Example:
+    To use this module, follow these three simple steps:
+    
+    1) Define a function to be optimised: This function has to take a dictionary of parameter as argument:
+    
+        def difficult_problem(param_dict):
+            result = (1-param_dict['x'])**2+100*(param_dict['y']-param_dict['x']**2)
+            if param_dict['luck'] == 'lucky':
+                result -= 10
+            else:
+                result += 10
+            return result
+    This function could be anything that takes parameters as input and outputs a scalar value.
+    
+    It could evaluate a model's cross-validation score based on given hyperparameter values,
+    ethe efficiency of a resourcing plan... The possibilities are limitless.
+    
+    2) Define a search space:
+    
+        search_space = [(
+            Integer(-100,100, 'x'),
+            Real(-100,100, 'y'),
+            Categorical(['lucky', 'unlucky'], 'luck')
+        )]
+        
+    The search space can be composed of Integer, Real and Categorical variables.
+    Numeric parameters are initialised with a lower bound, upper bound and a parameter name.
+    Categorical parameters require a list of possible values and a parameter name.
+    
+    3) Run the evolutionary algorithm:
+    
+        best_params = optimise(difficult_problem, search_space,minimize=True, 
+                                   population_size=20,n_rounds=500)
+        
+    
+        
+    
+'''
+
+
 # In[1]:
 
 
@@ -55,17 +104,20 @@ class Individual:
         '''
         Evaluates an individual's fitness based on its parameters and a function
         
-        Arguments
-        function - user-selected function to be optimised
+        Args:
+            function (function): user-selected function to be optimised
         
-        Note
-        This function must take a dictionary as argument. 
-        This dictionary's keys must match the search space's parameter name
+        Note:
+            This function must take a dictionary as argument. 
+            This dictionary's keys must match the search space's parameter name
+        
+        Raises:
+            ValueError if fitness cannot be evaluated for a given individual
         '''
         try:
             self.fitness = opt_function(self.params)
         except:
-            raise Exception("An error occurred while evaluating Individual {ind_id}'s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function's execution should not generate errors".format(ind_id = self.ind_id, params = self.params))
+            raise ValueError("An error occurred while evaluating Individual {ind_id}'s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function's execution should not generate errors".format(ind_id = self.ind_id, params = self.params))
     
 
 
@@ -76,22 +128,24 @@ class Integer():
     '''
     Integer Parameter class, member of the Search Space
     
-    Required inputs for initialisation
-    lower_bound (int) - parameter space lower bound
-    upper_bound (int) - parameter space upper bound
-    name (str) - parameter name
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
     
-    Attributes
-    lower_bound (int) - parameter space lower bound
-    upper_bound (int) - parameter space upper bound
-    name (str) - parameter name
-    var_type (str) - parameter type, used in the sampling process
-    check (str) - string 'parameter', used to check the integrity of the search space
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string 'parameter', used to check the integrity of the search space
     
-    Note
-    This parameter's name must be consistent with the keys of the dictionary
-    fed into the optimised function
-    An error will also be raised if the lower bound is superior or equal to the lower bound
+    Note:
+        This parameter's name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+     
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
     '''
     def __init__(self, lower_bound, upper_bound, name):
         self.lower_bound = lower_bound
@@ -109,22 +163,24 @@ class Real():
     '''
     Real Parameter class, member of the Search Space
     
-    Required inputs for initialisation
-    lower_bound (int) - parameter space lower bound
-    upper_bound (int) - parameter space upper bound
-    name (str) - parameter name
+    Args:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
     
-    Attributes
-    lower_bound (int) - parameter space lower bound
-    upper_bound (int) - parameter space upper bound
-    name (str) - parameter name
-    var_type (str) - parameter type, used in the sampling process
-    check (str) - string 'parameter', used to check the integrity of the search space
+    Attributes:
+        lower_bound (int): parameter space lower bound
+        upper_bound (int): parameter space upper bound
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string 'parameter', used to check the integrity of the search space
     
-    Note
-    This parameter's name must be consistent with the keys of the dictionary
-    fed into the optimised function
-    An error will also be raised if the lower bound is superior or equal to the lower bound
+    Note:
+        This parameter's name must be consistent with the keys of the dictionary \
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the lower bound is superior or equal to the lower bound
     '''
     def __init__(self, lower_bound, upper_bound, name):
         self.lower_bound = lower_bound
@@ -142,20 +198,22 @@ class Categorical():
     '''
     Categorical Parameter class, member of the Search Space
     
-    Required inputs for initialisation
-    value_list (iterable) - list of possible values
-    name (str) - parameter name
+    Args:
+        value_list (iterable): list of possible values
+        name (str): parameter name
     
-    Attributes
-    value_list (iterable) - list of possible values
-    name (str) - parameter name
-    var_type (str) - parameter type, used in the sampling process
-    check (str) - string 'parameter', used to check the integrity of the search space
+    Attributes:
+        value_list (iterable): list of possible values
+        name (str): parameter name
+        var_type (str): parameter type, used in the sampling process
+        check (str): string 'parameter', used to check the integrity of the search space
     
-    Note
-    This parameter's name must be consistent with the keys of the dictionary
-    fed into the optimised function
-    An error will also be raised if the lower bound is superior or equal to the lower bound
+    Note:
+        This parameter's name must be consistent with the keys of the dictionary
+        fed into the optimised function
+    
+    Raises:
+        ValueError if the value list argument is not an iterable
     '''
     def __init__(self, value_list, name):
         self.value_list = value_list
@@ -181,38 +239,37 @@ class Population:
     '''
     The PoPulation class is the main class of the genetic algorithm
     
-    Required inputs for initialisation
-    pop_size (int) - size of the population
-    search_space (list) - list of parameters initialised with the Integer, Real or Categorical classes defined above
-    Optional
-    minimize (bool) - True if the optimisation is a minimisation problem, False for maximisation (default: True)
+    Args:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        minimize (bool, default = True): True if the optimisation is a minimisation problem, False for maximisation (default: True)
     
-    Attributes
-    pop_size (int) - size of the population
-    search_space (list) - list of parameters initialised with the Integer, Real or Categorical classes defined above
-    stage (int) - current evolution stage, set to 0
-    id_count (int) - individual counter, used to generate ids, set to 0
-    reverse (bool) - Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
-    param_names (list) - list of the parameter names listed in the search space
-    param_dict (dict) - dictionary of parameters generated from the search space list
+    Attributes:
+        pop_size (int): size of the population
+        search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
+        stage (int): current evolution stage, set to 0
+        id_count (int): individual counter, used to generate ids, set to 0
+        reverse (bool): Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
+        param_names (list):list of the parameter names listed in the search space
+        param_dict (dict): dictionary of parameters generated from the search space list
     
-    Methods
-    get_random_param - randomly draws a new parameter value
-    get_initial_population - randomly generates a new population
-    evaluate_population - evaluates a population's fitness
-    sort_population - sort a population based on its fitness
-    natural_selection - selects the n best individuals of a population
-    get_offspring - generates offspring and appends them to the population
-    round_log - generates a log describing the evolution round's history
-    evolution - executes the evolution algorithm
-    fitness_overtime - plots the best population fitness by evolution round
-    network_genealogy - returns a networkx compatible genealogy
-    get_population_params - returns a list of the population's parameters
-    get_population_params_fitness - returns a list of the population's parameters and fitness
-    get_best_params - returns the best parameters of the population (based on fitness)
+    Methods:
+        get_random_param: randomly draws a new parameter value
+        get_initial_population: randomly generates a new population
+        evaluate_population: evaluates a population's fitness
+        sort_population: sort a population based on its fitness
+        natural_selection: selects the n best individuals of a population
+        get_offspring: generates offspring and appends them to the population
+        round_log: generates a log describing the evolution round's history
+        evolution: executes the evolution algorithm
+        fitness_overtime: plots the best population fitness by evolution round
+        network_genealogy: returns a networkx compatible genealogy
+        get_population_params: returns a list of the population's parameters
+        get_population_params_fitness: returns a list of the population's parameters and fitness
+        get_best_params: returns the best parameters of the population (based on fitness)
     
-    Note
-    An error will be raised if an item of the search space list is not a member of the Integer, Real or Categorical class
+    Raises:
+        ValueError if an item of the search space list is not a member of the Integer, Real or Categorical class
     '''
     def __init__(self, pop_size, search_space, minimize = True):
         self.pop_size = pop_size
@@ -234,11 +291,11 @@ class Population:
         '''
         Randomly draws a parameter value
         
-        Arguments
-        param_name (str) - name of the parameter to be drawn
+        Args:
+            param_name (str): name of the parameter to be drawn
         
-        Output
-        Returns a random parameter value
+        Returns:
+            A random parameter value selected from the search space
         '''
         if self.param_dict[param_name].var_type=='int':
             return round(np.random.uniform(self.param_dict[param_name].lower_bound,
@@ -271,17 +328,17 @@ class Population:
         '''
         Evaluates each of a population's individuals based on an optimisation function
         
-        Argument
-        opt_function (function) - function to be optimised
+        Args:
+            opt_function (function) - function to be optimised
         
         Note
-        To correctly define the optimisation function, please make sure that the following requirements are met:
-        1) The function requires a parameter dictionary as only required argument
-        2) The name of the dictionary keys expected by the function matches the parameter names
-         defined in the search space
-        3) The search space has been defined to avoid errors, or the function has been built to
-         handle them correctly
-        4) The function's execution should not generate errors
+            To correctly define the optimisation function, please make sure that the following requirements are met:
+            1) The function requires a parameter dictionary as only required argument
+            2) The name of the dictionary keys expected by the function matches the parameter names
+              defined in the search space
+            3) The search space has been defined to avoid errors, or the function has been built to
+              handle them correctly
+            4) The function's execution should not generate errors
         '''
         for i,ind in enumerate(self.population):
             #Only evaluates individuals with no fitness
@@ -295,8 +352,8 @@ class Population:
         '''
         Sorts a population using its individual's fitness scores
         
-        Note
-        This score will be ascending or descending based on the chosen direction of the optimisation problem
+        Note:
+            This score will be ascending or descending based on the chosen direction of the optimisation problem
         '''
         self.population = sorted(self.population, key=lambda ind: ind.fitness, reverse=self.reverse)
         
@@ -312,11 +369,11 @@ class Population:
         '''
         Generates a list of offspring
         
-        Arguments
-        n_children (int) - number of children
-        n_sample (int) - number of candidate parents sampled from the population
-        p_mutation (float) - mutation probability
-        p_crossover (float) - crossover probability
+        Args:
+            n_children (int): number of children
+            n_sample (int): number of candidate parents sampled from the population
+            p_mutation (float): mutation probability
+            p_crossover (float): crossover probability
         '''
         #Increments the evolution stage by 1
         self.stage += 1
@@ -355,8 +412,8 @@ class Population:
         '''
         Generates a round log, with a row for each individual id/stage combination
         
-        Output
-        round_log (list) - evolution round description
+        Returns:
+             list: evolution round description
         '''
         round_log = []
         for rank,individual in enumerate(self.population):
@@ -378,17 +435,16 @@ class Population:
         '''
         Executes the evolution algorithm for a set number of iterations
         
-        Arguments
-        opt_function (function) - function to be optimised
-        n_rounds (int) - number of evolution rounds
-        n_children (int) - number of children
-        n_sample (int) - number of candidate parents sampled from the population
-        p_mutation (float) - mutation probability
-        p_crossover (float) - crossover probability
+        Args:
+             opt_function (function): function to be optimised
+             n_rounds (int): number of evolution rounds
+             n_children (int): number of children
+             n_sample (int): number of candidate parents sampled from the population
+             p_mutation (float): mutation probability
+             p_crossover (float): crossover probability
         
-        Ouput
-        log_df (dataframe) - dataframe containing a summary of the evolution process, 
-        with a row by id/stage combination
+        Returns:
+             dataframe: dataframe containing a summary of the evolution process, with a row by id/stage combination
         '''
         log_list = []
         for i in range(n_rounds):
@@ -406,8 +462,8 @@ class Population:
         '''
         Plots fitness over time
         
-        Argument
-        log_df (dataframe) - dataframe containing a summary of the evolution process
+        Args:
+             dataframe: dataframe containing a summary of the evolution process
         '''
         log_df = log_df[log_df['rank']==1]
         ax = log_df.plot('stage', 'fitness') 
@@ -419,11 +475,11 @@ class Population:
         '''
         Generates a networkX compatible genealogy in a pandas dataframe format
         
-        Argument
-        log_df (dataframe) - pandas dataframe containing a summary of the evolution process
+        Args:
+            log_df (dataframe): pandas dataframe containing a summary of the evolution process
         
-        Output
-        genealogy (dataframe) - pandas dataframe convertible to a NetworkX graph
+        Returns:
+             dataframe: pandas dataframe convertible to a NetworkX graph
         '''
         pass
     
@@ -431,8 +487,8 @@ class Population:
         '''
         Generates a list of the population's parameters
         
-        Output
-        param_list (list) - a list of the poulation's individuals' parameters
+        Returns:
+            list: a list of the poulation's individuals' parameters
         '''
         param_list = []
         for ind in self.population:
@@ -443,8 +499,8 @@ class Population:
         '''
         Generates a list of the population's parameters and their associated fitness
         
-        Output
-        param_fitness (list) - list of dictionaries containing each individual's parameters and fitness
+        Returns
+            list: list of dictionaries containing each individual's parameters and fitness
         '''
         param_fitness = []
         for ind in self.population:
@@ -461,7 +517,7 @@ class Population:
         return self.population[0].params
 
 
-# In[5]:
+# In[1]:
 
 
 def optimise(function, search_space,
@@ -472,8 +528,24 @@ def optimise(function, search_space,
              return_population = False):
     
     '''
+    Optimises a function given a search space
+    
     Args:
-        minimize (bool, default=True): sort direction
+        function (function): function to be optimised
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        minimize (bool, default = True): nature of the optimsation objective
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+    
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
     '''
     
     pop = Population(population_size, search_space=search_space, minimize = minimize)
@@ -501,7 +573,26 @@ def solve(function, target_value, search_space, population_size=10,
              n_sample=4, p_mutation=0.2, 
              p_crossover=0.6, return_log = False, 
              return_population = False):
+    '''
+    Solves a function for a target value and a search space
     
+    Args:
+        function (function): function to be optimised
+        target_value (float): function target value
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        population_size (int, default = 20): size of the population, number of individuals
+        n_rounds (int, default = 500): number of evolution rounds
+        n_children (int, default = 10): number of children generated at each round
+        p_mutation (float, default = 0.2): probability of mutation
+        p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
+        return_log (bool, default = False): returns an evolution log if true
+        return_population (bool, default = False): returns a population object if true
+     
+    Returns:
+        dict: parameters of the fittest individual after the final round of evolution
+        dataframe, optional: dataframe containing a row for each individual id / stage combination
+        Population, optional: Population object for customised analysis
+    '''
     def absolute_error(params):
         return abs(function(params)-target_value)
     
@@ -521,6 +612,12 @@ def solve(function, target_value, search_space, population_size=10,
     else:
         return best_params
     
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
