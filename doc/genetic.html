@@ -6,8 +6,7 @@
 <meta name="generator" content="pdoc 0.8.1" />
 <title>genetic API documentation</title>
 <meta name="description" content="This module is a Python implementation of a genetic algorithm with a regularized evolution process.
-It was inspired by the following paper:
-…" />
+It was inspired by the following paper: …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -23,8 +22,8 @@ It was inspired by the following paper:
 </header>
 <section id="section-intro">
 <p>This module is a Python implementation of a genetic algorithm with a regularized evolution process.
-It was inspired by the following paper:
-Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search."
+It was inspired by the following paper:</p>
+<p>Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search."
 International Conference on Image Analysis and Processing. Springer, Cham, 2019.</p>
 <h2 id="example">Example</h2>
 <p>To use this module, follow these three simple steps:</p>
@@ -67,14 +66,12 @@ Categorical parameters require a list of possible values and a parameter name.</
 <pre><code class="python">#!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 &#39;&#39;&#39;
 This module is a Python implementation of a genetic algorithm with a regularized evolution process.
 It was inspired by the following paper:
-    Saltori, Cristiano, et al. &#34;Regularized Evolutionary Algorithm for Dynamic Neural Topology Search.&#34; 
-    International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+
+ Saltori, Cristiano, et al. &#34;Regularized Evolutionary Algorithm for Dynamic Neural Topology Search.&#34; 
+ International Conference on Image Analysis and Processing. Springer, Cham, 2019.
 
 Example:
     To use this module, follow these three simple steps:
@@ -122,9 +119,6 @@ Example:
 &#39;&#39;&#39;
 
 
-# In[2]:
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -133,9 +127,6 @@ import random
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.offsetbox import AnchoredText
 from sklearn.preprocessing import StandardScaler
-
-
-# In[3]:
 
 
 class Individual:
@@ -180,9 +171,6 @@ class Individual:
         except:
             raise ValueError(&#34;An error occurred while evaluating Individual {ind_id}&#39;s fitness \n             with the following parameters: {params} \n             To debug this problem, please make sure that the following requirements are met: \n             1) The function requires a parameter as only required argument \n             2) The name of the dictionary keys expected by the function matches the parameter names             defined in the search space \n             3) The search space has been defined to avoid errors, or the function has been built to             handle them correctly \n             4) The function&#39;s execution should not generate errors&#34;.format(ind_id = self.ind_id, params = self.params))
     
-
-
-# In[4]:
 
 
 class Integer():
@@ -231,13 +219,13 @@ class Real():
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        precision (int, optional): desired number of decimals
+        decimals (int, optional): desired number of decimals
     
     Attributes:
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        precision (int): desired number of decimals
+        decimals (int): desired number of decimals
         var_type (str): parameter type, used in the sampling process
         check (str): string &#39;parameter&#39;, used to check the integrity of the search space
     
@@ -248,11 +236,11 @@ class Real():
     Raises:
         ValueError if the lower bound is superior or equal to the lower bound
     &#39;&#39;&#39;
-    def __init__(self, lower_bound, upper_bound, name, precision = 3):
+    def __init__(self, lower_bound, upper_bound, name, decimals = 3):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
-        self.precision = precision
+        self.decimals = decimals
         self.var_type = &#39;real&#39;
         self.check = &#39;parameter&#39;
         if self.lower_bound &gt;= self.upper_bound:
@@ -297,9 +285,6 @@ class Categorical():
             #Raises an error if the value_list is not iterable
             raise ValueError(&#34;An iterable object has to be provided as list of values for the parameter &#39;{}&#39;&#34;
                              .format(self.name))     
-
-
-# In[5]:
 
 
 class Population:
@@ -365,9 +350,9 @@ class Population:
             A random parameter value selected from the search space
         &#39;&#39;&#39;
         if self.param_dict[param_name].var_type==&#39;int&#39;:
-            return random.randrange(self.param_dict[param_name].lower_bound,
-                                    self.param_dict[param_name].upper_bound,
-                                    self.param_dict[param_name].step)
+            return random.choice(np.arange(self.param_dict[param_name].lower_bound,
+                                           self.param_dict[param_name].upper_bound,
+                                           self.param_dict[param_name].step))
         elif self.param_dict[param_name].var_type==&#39;real&#39;:
             return round(np.random.uniform(
                                      self.param_dict[param_name].lower_bound,
@@ -505,7 +490,7 @@ class Population:
             round_log.append(log_row)
         return round_log
     
-    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose):
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose=True):
         &#39;&#39;&#39;
         Executes the evolution algorithm for a set number of iterations
         
@@ -596,14 +581,11 @@ class Population:
         return self.population[0].params
 
 
-# In[6]:
-
-
 def optimise(function, search_space,
              minimize=True, population_size=20,
              n_rounds=500, n_children=10, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = False,
+             p_crossover=0.6, verbose = True,
              return_log = False, return_population = False):
     
     &#39;&#39;&#39;
@@ -631,7 +613,7 @@ def optimise(function, search_space,
     pop = Population(population_size, search_space=search_space, minimize = minimize)
     pop.get_initial_population()
     pop.evaluate_population(function)
-    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
     best_params = pop.get_best_params()  
     print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
     print(&#39;Best score: {}&#39;.format(pop.population[0].fitness))
@@ -642,16 +624,16 @@ def optimise(function, search_space,
         else:
             return best_params, run_log
     else:
-        return best_params
-
-
-# In[7]:
+        if return_population:
+            return best_params, pop
+        else:
+            return best_params
 
 
 def solve(function, target_value, search_space, population_size=10,
              n_rounds=500, n_children=20, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = False,
+             p_crossover=0.6, verbose = True,
              return_log = False, return_population = False):
     &#39;&#39;&#39;
     Solves a function for a target value and a search space
@@ -680,7 +662,7 @@ def solve(function, target_value, search_space, population_size=10,
     pop = Population(population_size, search_space=search_space, minimize = True)
     pop.get_initial_population()
     pop.evaluate_population(absolute_error)
-    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
     best_params = pop.get_best_params()
     print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
     print(&#39;Lowest Absolute Error: {}&#39;.format(pop.population[0].fitness))
@@ -691,17 +673,11 @@ def solve(function, target_value, search_space, population_size=10,
         else:
             return best_params, run_log
     else:
-        return best_params
-    
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:</code></pre>
+        if return_population:
+            return best_params, pop
+        else:
+            return best_params
+    </code></pre>
 </details>
 </section>
 <section>
@@ -712,7 +688,7 @@ def solve(function, target_value, search_space, population_size=10,
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="genetic.optimise"><code class="name flex">
-<span>def <span class="ident">optimise</span></span>(<span>function, search_space, minimize=True, population_size=20, n_rounds=500, n_children=10, n_sample=4, p_mutation=0.2, p_crossover=0.6, verbose=False, return_log=False, return_population=False)</span>
+<span>def <span class="ident">optimise</span></span>(<span>function, search_space, minimize=True, population_size=20, n_rounds=500, n_children=10, n_sample=4, p_mutation=0.2, p_crossover=0.6, verbose=True, return_log=False, return_population=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Optimises a function given a search space</p>
@@ -758,7 +734,7 @@ def solve(function, target_value, search_space, population_size=10,
              minimize=True, population_size=20,
              n_rounds=500, n_children=10, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = False,
+             p_crossover=0.6, verbose = True,
              return_log = False, return_population = False):
     
     &#39;&#39;&#39;
@@ -786,7 +762,7 @@ def solve(function, target_value, search_space, population_size=10,
     pop = Population(population_size, search_space=search_space, minimize = minimize)
     pop.get_initial_population()
     pop.evaluate_population(function)
-    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
     best_params = pop.get_best_params()  
     print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
     print(&#39;Best score: {}&#39;.format(pop.population[0].fitness))
@@ -797,11 +773,14 @@ def solve(function, target_value, search_space, population_size=10,
         else:
             return best_params, run_log
     else:
-        return best_params</code></pre>
+        if return_population:
+            return best_params, pop
+        else:
+            return best_params</code></pre>
 </details>
 </dd>
 <dt id="genetic.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>function, target_value, search_space, population_size=10, n_rounds=500, n_children=20, n_sample=4, p_mutation=0.2, p_crossover=0.6, verbose=False, return_log=False, return_population=False)</span>
+<span>def <span class="ident">solve</span></span>(<span>function, target_value, search_space, population_size=10, n_rounds=500, n_children=20, n_sample=4, p_mutation=0.2, p_crossover=0.6, verbose=True, return_log=False, return_population=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Solves a function for a target value and a search space</p>
@@ -845,7 +824,7 @@ def solve(function, target_value, search_space, population_size=10,
 <pre><code class="python">def solve(function, target_value, search_space, population_size=10,
              n_rounds=500, n_children=20, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = False,
+             p_crossover=0.6, verbose = True,
              return_log = False, return_population = False):
     &#39;&#39;&#39;
     Solves a function for a target value and a search space
@@ -874,7 +853,7 @@ def solve(function, target_value, search_space, population_size=10,
     pop = Population(population_size, search_space=search_space, minimize = True)
     pop.get_initial_population()
     pop.evaluate_population(absolute_error)
-    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
     best_params = pop.get_best_params()
     print(&#39;Number of Iterations: {}&#39;.format(pop.stage))
     print(&#39;Lowest Absolute Error: {}&#39;.format(pop.population[0].fitness))
@@ -885,7 +864,10 @@ def solve(function, target_value, search_space, population_size=10,
         else:
             return best_params, run_log
     else:
-        return best_params</code></pre>
+        if return_population:
+            return best_params, pop
+        else:
+            return best_params</code></pre>
 </details>
 </dd>
 </dl>
@@ -1289,9 +1271,9 @@ get_best_params: returns the best parameters of the population (based on fitness
             A random parameter value selected from the search space
         &#39;&#39;&#39;
         if self.param_dict[param_name].var_type==&#39;int&#39;:
-            return random.randrange(self.param_dict[param_name].lower_bound,
-                                    self.param_dict[param_name].upper_bound,
-                                    self.param_dict[param_name].step)
+            return random.choice(np.arange(self.param_dict[param_name].lower_bound,
+                                           self.param_dict[param_name].upper_bound,
+                                           self.param_dict[param_name].step))
         elif self.param_dict[param_name].var_type==&#39;real&#39;:
             return round(np.random.uniform(
                                      self.param_dict[param_name].lower_bound,
@@ -1429,7 +1411,7 @@ get_best_params: returns the best parameters of the population (based on fitness
             round_log.append(log_row)
         return round_log
     
-    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose):
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose=True):
         &#39;&#39;&#39;
         Executes the evolution algorithm for a set number of iterations
         
@@ -1573,7 +1555,7 @@ handle them correctly</p>
 </details>
 </dd>
 <dt id="genetic.Population.evolution"><code class="name flex">
-<span>def <span class="ident">evolution</span></span>(<span>self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)</span>
+<span>def <span class="ident">evolution</span></span>(<span>self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose=True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Executes the evolution algorithm for a set number of iterations</p>
@@ -1603,7 +1585,7 @@ handle them correctly</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose):
+<pre><code class="python">def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose=True):
     &#39;&#39;&#39;
     Executes the evolution algorithm for a set number of iterations
     
@@ -1854,9 +1836,9 @@ list: list of dictionaries containing each individual's parameters and fitness</
         A random parameter value selected from the search space
     &#39;&#39;&#39;
     if self.param_dict[param_name].var_type==&#39;int&#39;:
-        return random.randrange(self.param_dict[param_name].lower_bound,
-                                self.param_dict[param_name].upper_bound,
-                                self.param_dict[param_name].step)
+        return random.choice(np.arange(self.param_dict[param_name].lower_bound,
+                                       self.param_dict[param_name].upper_bound,
+                                       self.param_dict[param_name].step))
     elif self.param_dict[param_name].var_type==&#39;real&#39;:
         return round(np.random.uniform(
                                  self.param_dict[param_name].lower_bound,
@@ -1982,7 +1964,7 @@ This n is the population size</p></div>
 </dd>
 <dt id="genetic.Real"><code class="flex name class">
 <span>class <span class="ident">Real</span></span>
-<span>(</span><span>lower_bound, upper_bound, name, precision=3)</span>
+<span>(</span><span>lower_bound, upper_bound, name, decimals=3)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Real Parameter class, member of the Search Space</p>
@@ -1994,7 +1976,7 @@ This n is the population size</p></div>
 <dd>parameter space upper bound</dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>parameter name</dd>
-<dt><strong><code>precision</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dt><strong><code>decimals</code></strong> :&ensp;<code>int</code>, optional</dt>
 <dd>desired number of decimals</dd>
 </dl>
 <h2 id="attributes">Attributes</h2>
@@ -2005,7 +1987,7 @@ This n is the population size</p></div>
 <dd>parameter space upper bound</dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>parameter name</dd>
-<dt><strong><code>precision</code></strong> :&ensp;<code>int</code></dt>
+<dt><strong><code>decimals</code></strong> :&ensp;<code>int</code></dt>
 <dd>desired number of decimals</dd>
 <dt><strong><code>var_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>parameter type, used in the sampling process</dd>
@@ -2032,13 +2014,13 @@ fed into the optimised function</p>
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        precision (int, optional): desired number of decimals
+        decimals (int, optional): desired number of decimals
     
     Attributes:
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        precision (int): desired number of decimals
+        decimals (int): desired number of decimals
         var_type (str): parameter type, used in the sampling process
         check (str): string &#39;parameter&#39;, used to check the integrity of the search space
     
@@ -2049,11 +2031,11 @@ fed into the optimised function</p>
     Raises:
         ValueError if the lower bound is superior or equal to the lower bound
     &#39;&#39;&#39;
-    def __init__(self, lower_bound, upper_bound, name, precision = 3):
+    def __init__(self, lower_bound, upper_bound, name, decimals = 3):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
-        self.precision = precision
+        self.decimals = decimals
         self.var_type = &#39;real&#39;
         self.check = &#39;parameter&#39;
         if self.lower_bound &gt;= self.upper_bound:

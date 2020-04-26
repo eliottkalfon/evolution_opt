@@ -4,8 +4,9 @@
 '''
 This module is a Python implementation of a genetic algorithm with a regularized evolution process.
 It was inspired by the following paper:
-    Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
-    International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+
+ Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
+ International Conference on Image Analysis and Processing. Springer, Cham, 2019.
 
 Example:
     To use this module, follow these three simple steps:
