@@ -5,8 +5,8 @@
 This module is a Python implementation of a genetic algorithm with a regularized evolution process.
 It was inspired by the following paper:
 
- Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
- International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+    Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
+    International Conference on Image Analysis and Processing. Springer, Cham, 2019.
 
 Example:
     To use this module, follow these three simple steps:
@@ -42,7 +42,7 @@ Example:
     
     3) Run the evolutionary algorithm
     
-        best_params = optimise(difficult_problem, search_space,minimize=True, 
+        best_params = optimise(difficult_problem,search_space,minimize=True, 
                                    population_size=20,n_rounds=500)   
                                    
         # Prints:
@@ -55,13 +55,11 @@ Example:
 
 
 import numpy as np
+import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
 import copy
 import random
-from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.offsetbox import AnchoredText
-from sklearn.preprocessing import StandardScaler
 
 
 class Individual:
@@ -137,7 +135,7 @@ class Integer():
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
-        self.step = 1
+        self.step = step
         self.var_type = 'int'
         self.check = 'parameter'
         if self.lower_bound >= self.upper_bound:
@@ -154,13 +152,24 @@ class Real():
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        decimals (int, optional): desired number of decimals
+        precision (int, optional): desired number of decimals
+        prior (str, optional): sampling distribution, default is 'uniform'. 'normal', 'lognormal',
+        'exponential' and 'gamma' are also accepted
+        mean (float, optional): default is 0, only required for 'normal' and 'lognormal' prior distributions
+        stdev (float, optional): default is 1, only required for 'normal' and 'lognormal' prior distributions
+        scale (float, oprional): default is 1, only required for 'exponential' and 'gamma' prior distributions
+        shape (float, oprional): default is 1, only required for 'gamma' prior distributions
+        
     
     Attributes:
         lower_bound (int): parameter space lower bound
         upper_bound (int): parameter space upper bound
         name (str): parameter name
-        decimals (int): desired number of decimals
+        precision (int): desired number of decimals
+        mean (float, optional): default is 0, only required for 'normal' and 'lognormal' prior distributions
+        stdev (float, optional): default is 1, only required for 'normal' and 'lognormal' prior distributions
+        scale (float, oprional): default is 1, only required for 'exponential' and 'gamma' prior distributions
+        shape (float, oprional): default is 1, only required for 'gamma' prior distributions
         var_type (str): parameter type, used in the sampling process
         check (str): string 'parameter', used to check the integrity of the search space
     
@@ -171,11 +180,19 @@ class Real():
     Raises:
         ValueError if the lower bound is superior or equal to the lower bound
     '''
-    def __init__(self, lower_bound, upper_bound, name, decimals = 3):
+    def __init__(self, lower_bound, upper_bound, name,
+                 precision = 3, prior = 'uniform',
+                 mean = 0, stdev = 1, 
+                 scale = 1, shape = 1):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.name = name
-        self.decimals = decimals
+        self.precision = precision
+        self.prior = prior
+        self.mean = mean
+        self.stdev = stdev
+        self.scale = scale
+        self.shape = shape
         self.var_type = 'real'
         self.check = 'parameter'
         if self.lower_bound >= self.upper_bound:
@@ -183,6 +200,30 @@ class Real():
                              " upper bound {}".format(lower_bound, upper_bound))
         else:
             pass
+    def plot_prior(self):
+        '''
+        Plots the prior distribution of a Real parameter
+        '''
+        x = np.linspace(self.lower_bound, self.upper_bound, 200)
+        print('Parameter Name: {name} \nPrior Distribution: {prior}'.format(name = self.name, prior = self.prior))
+        if self.prior == 'uniform':
+            y = stats.uniform.pdf(x)
+        elif self.prior == 'normal':
+            y = stats.norm.pdf(x, self.mean, self.stdev)
+            print('Mean: {mean} \nStandard Deviation: {stdev}\n'.format(mean = self.mean, stdev = self.stdev))
+        elif self.prior == 'lognormal':
+            print('Mean: {mean} \nStandard Deviation: {stdev}\n'.format(mean = self.mean, stdev = self.stdev))
+            y = stats.lognorm.pdf(x, s = self.stdev, scale = self.mean)
+        elif self.prior == 'exponential':
+            print('Scale: {scale} \n'.format(scale= self.scale))
+            y = stats.expon.pdf(x, scale = self.scale)        
+        elif self.prior == 'gamma':
+            print('Shape: {shape} \nScale: {scale}'.format(shape = self.shape, scale = self.scale))
+            y = stats.gamma.pdf(x, a = self.shape, scale = self.scale)
+        plt.plot(x, y)
+        plt.title(self.name, fontsize = 15, pad = 10)
+        plt.show()
+        
         
 class Categorical():
     '''
@@ -229,7 +270,7 @@ class Population:
     Args:
         pop_size (int): size of the population
         search_space (list): list of parameters initialised with the Integer, Real or Categorical classes defined above
-        minimize (bool, default = True): True if the optimisation is a minimisation problem, False for maximisation (default: True)
+        minimize (bool, default = True): True if the optimisation is a minimisation problem, False for maximisation
     
     Attributes:
         pop_size (int): size of the population
@@ -239,22 +280,7 @@ class Population:
         reverse (bool): Logical negation of the minimize argument, used to determine the sort direction (ASC or DESC)
         param_names (list):list of the parameter names listed in the search space
         param_dict (dict): dictionary of parameters generated from the search space list
-    
-    Methods:
-        get_random_param: randomly draws a new parameter value
-        get_initial_population: randomly generates a new population
-        evaluate_population: evaluates a population's fitness
-        sort_population: sort a population based on its fitness
-        natural_selection: selects the n best individuals of a population
-        get_offspring: generates offspring and appends them to the population
-        round_log: generates a log describing the evolution round's history
-        evolution: executes the evolution algorithm
-        fitness_overtime: plots the best population fitness by evolution round
-        network_genealogy: returns a networkx compatible genealogy
-        get_population_params: returns a list of the population's parameters
-        get_population_params_fitness: returns a list of the population's parameters and fitness
-        get_best_params: returns the best parameters of the population (based on fitness)
-    
+
     Raises:
         ValueError if an item of the search space list is not a member of the Integer, Real or Categorical class
     '''
@@ -285,14 +311,46 @@ class Population:
             A random parameter value selected from the search space
         '''
         if self.param_dict[param_name].var_type=='int':
-            return random.choice(np.arange(self.param_dict[param_name].lower_bound,
-                                           self.param_dict[param_name].upper_bound,
-                                           self.param_dict[param_name].step))
+            return random.randrange(self.param_dict[param_name].lower_bound,
+                                    self.param_dict[param_name].upper_bound,
+                                    self.param_dict[param_name].step)
+        
         elif self.param_dict[param_name].var_type=='real':
-            return round(np.random.uniform(
+            
+            if self.param_dict[param_name].prior == 'uniform':
+                return round(np.random.uniform(
                                      self.param_dict[param_name].lower_bound,
                                      self.param_dict[param_name].upper_bound
                                      ),self.param_dict[param_name].precision)
+            elif self.param_dict[param_name].prior == 'normal':
+                sample = round(np.random.normal(
+                                     self.param_dict[param_name].mean,
+                                     self.param_dict[param_name].stdev
+                                     ),self.param_dict[param_name].precision)
+                return min(max(self.param_dict[param_name].lower_bound, sample), self.param_dict[param_name].upper_bound)
+                
+            elif self.param_dict[param_name].prior == 'lognormal':
+                sample = round(np.random.lognormal(
+                                     self.param_dict[param_name].mean,
+                                     self.param_dict[param_name].stdev
+                                     ),self.param_dict[param_name].precision)
+                return min(max(self.param_dict[param_name].lower_bound, sample), self.param_dict[param_name].upper_bound)
+                
+            elif self.param_dict[param_name].prior == 'gamma':
+                sample = round(np.random.gamma(
+                                     self.param_dict[param_name].shape,
+                                     self.param_dict[param_name].scale
+                                     ),self.param_dict[param_name].precision)
+                return min(max(self.param_dict[param_name].lower_bound, sample), self.param_dict[param_name].upper_bound)
+            
+                
+            elif self.param_dict[param_name].prior == 'exponential':
+                sample = round(np.random.exponential(
+                                     self.param_dict[param_name].scale
+                                     ),self.param_dict[param_name].precision)
+                return min(max(self.param_dict[param_name].lower_bound, sample), self.param_dict[param_name].upper_bound)
+                
+            
         elif self.param_dict[param_name].var_type=='categorical':
             return np.random.choice(self.param_dict[param_name].value_list)
         else:
@@ -425,7 +483,7 @@ class Population:
             round_log.append(log_row)
         return round_log
     
-    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose=True):
+    def evolution(self, opt_function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose):
         '''
         Executes the evolution algorithm for a set number of iterations
         
@@ -469,18 +527,6 @@ class Population:
         ax.set_title('Fitness over time', fontsize = 20, pad=20)
         ax.set_xlabel('Generation (Program Iteration)', fontsize=12)
         ax.set_ylabel('Fitness', fontsize=12)
-        
-    def network_genealogy(self,log_df):
-        '''
-        Generates a networkX compatible genealogy in a pandas dataframe format
-        
-        Args:
-            log_df (dataframe): pandas dataframe containing a summary of the evolution process
-        
-        Returns:
-             dataframe: pandas dataframe convertible to a NetworkX graph
-        '''
-        pass
     
     def get_population_params(self):
         '''
@@ -520,7 +566,7 @@ def optimise(function, search_space,
              minimize=True, population_size=20,
              n_rounds=500, n_children=10, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = True,
+             p_crossover=0.6, verbose = False,
              return_log = False, return_population = False):
     
     '''
@@ -548,7 +594,7 @@ def optimise(function, search_space,
     pop = Population(population_size, search_space=search_space, minimize = minimize)
     pop.get_initial_population()
     pop.evaluate_population(function)
-    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    run_log = pop.evolution(function, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
     best_params = pop.get_best_params()  
     print('Number of Iterations: {}'.format(pop.stage))
     print('Best score: {}'.format(pop.population[0].fitness))
@@ -568,7 +614,7 @@ def optimise(function, search_space,
 def solve(function, target_value, search_space, population_size=10,
              n_rounds=500, n_children=20, 
              n_sample=4, p_mutation=0.2, 
-             p_crossover=0.6, verbose = True,
+             p_crossover=0.6, verbose = False,
              return_log = False, return_population = False):
     '''
     Solves a function for a target value and a search space
@@ -582,7 +628,7 @@ def solve(function, target_value, search_space, population_size=10,
         n_children (int, default = 10): number of children generated at each round
         p_mutation (float, default = 0.2): probability of mutation
         p_crossover (float, default = 0.6): probability of crossover - i.e. taking the gene from the dominant parent
-         verbose (bool, default = True): describes progress if True
+        verbose (bool, default = True): describes progress if True
         return_log (bool, default = False): returns an evolution log if true
         return_population (bool, default = False): returns a population object if true
      
@@ -597,7 +643,7 @@ def solve(function, target_value, search_space, population_size=10,
     pop = Population(population_size, search_space=search_space, minimize = True)
     pop.get_initial_population()
     pop.evaluate_population(absolute_error)
-    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover)
+    run_log = pop.evolution(absolute_error, n_rounds, n_children, n_sample, p_mutation, p_crossover, verbose)
     best_params = pop.get_best_params()
     print('Number of Iterations: {}'.format(pop.stage))
     print('Lowest Absolute Error: {}'.format(pop.population[0].fitness))
@@ -613,4 +659,75 @@ def solve(function, target_value, search_space, population_size=10,
         else:
             return best_params
     
+
+
+def random_opt(function, search_space,
+             minimize=True, n_iter = 20):
+    
+    '''
+    Random search used for genetic algorithm benchmark
+    
+    Args:
+        function (function): function to be optimised
+        search_space (list): list of parameters, either Integer, Real or Categorical
+        minimize (bool, default = True): nature of the optimsation objective
+        n_iter (int): number of random evaluations
+        
+    Returns:
+        dict: best set of parameters
+        float: fitness associated with the best parameters
+    '''
+
+    
+    pop = Population(n_iter, search_space=search_space, minimize = minimize)
+    pop.get_initial_population()
+    pop.evaluate_population(function)
+    pop.sort_population()
+    best_params = pop.population[0].params
+    best_fitness = pop.population[0].fitness
+    return best_params, best_fitness
+
+
+def network_genealogy(log_df):
+        '''
+        Generates a networkX compatible genealogy in a pandas dataframe format
+        
+        Args:
+            log_df (dataframe): pandas dataframe containing a summary of the evolution process
+        
+        Returns:
+             dataframe: pandas dataframe convertible to a NetworkX graph
+        '''
+        #Removes duplicate ids by only taking the first instance of each individual
+        log_df_unique = log_df.drop_duplicates(subset = ['id'] , keep = 'first')
+        #Gets a unique list of parameters
+        param_list = list(log_df)[list(log_df).index('rank')+1:]
+        #List of columns in the genealogy dataframes
+        column_list = ['parent', 'child', 'stage_born', 'fitness',
+                       'child_rank', 'fitness','parent_type'] + param_list
+        graph_list = []
+        #Iterates through the rows of the unique individual dataframe
+        for index, row in log_df_unique.iterrows():
+            #If the individual has parents (i.e. was not individually generated)
+            if row['parent_id']:
+                for index, parent in enumerate(row['parent_id']):
+                    row_list = [parent, row['id'], row['stage_born'], row['fitness'],
+                                row['rank'], row['fitness'], index+1]
+                    for param in param_list:
+                        row_list.append(row[param])
+                    graph_list.append(row_list)
+            else:
+                row_list = [row['parent_id'], row['id'], row['stage_born'], row['fitness'],
+                                row['rank'], row['fitness'], None]
+                for param in param_list:
+                    row_list.append(row[param])
+                graph_list.append(row_list)
+                
+        genealogy = pd.DataFrame(data = graph_list, 
+                                 columns=column_list)
+        
+        return genealogy
+
+
+
 
