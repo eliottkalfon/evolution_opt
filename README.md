@@ -9,6 +9,20 @@ This package is a Python aims at providing a range of nature-inspired optimisati
 This package can be installed with "pip" or by cloning this repository
 
     $ pip install evolution_opt
+	
+# Dependencies
+
+To install and run evolution_opt make sure that you have installed the following packages
+
+    pip install numpy pandas scipy matplotlib
+	
+# Importing evolution_opt
+
+```python
+import numpy as np
+import pandas as pd
+from evolution_opt import *
+```
 
 # Example Usage
 
