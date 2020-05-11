@@ -21,7 +21,7 @@ To install and run evolution_opt make sure that you have installed the following
 ```python
 import numpy as np
 import pandas as pd
-from evolution_opt import *
+from evolution_opt.genetic import *
 ```
 
 # Example Usage
