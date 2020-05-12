@@ -2,7 +2,17 @@
 
 # Description
 
-This package is a Python aims at providing a range of nature-inspired optimisation algorithms. This first version includes an implementation of genetic algorithm with "regularized evolution".
+This package is a Python aims at providing a range of nature-inspired optimisation algorithms. 
+The purpose of an optimisation algorithm is to find the maximum or minimum of a function. 
+Genetic algorithms are particularly useful when it comes to high-dimensional, non-linear and non-convex problems (e.g. finding a needle in a 10-dimensional hay). 
+These have a wide range of application from supply chain optimisation to hyperparameter tuning.
+This first version includes an implementation of genetic algorithm with "regularized evolution".
+
+Genetic algorithms are very useful in machine learning, especially in hyperparameter tunings.
+The example folder contains two examples of genetic algorithms used to:<br>
+1) Optimise the architecture and hyperparameters of a Neural Network<br>
+2) Tune the hyperparameters of a Support Vector Machine and XGBoost model
+
 
 # Installation
 
@@ -65,5 +75,13 @@ best_params = optimise(difficult_problem,search_space,minimize=True,
 # Best score: 0.00410559779230605
 # Best parameters: {'x': -0.0, 'y': -1.0640749388786759, 'luck': 'lucky'}
 ```
+
+# Credits
+
+- Icon featured in the logo: Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+- Regularized Evolution Algorithm inspiration: Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+
+
+
 
 
