@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="evolution_opt", 
-    version="0.0.4",
+    version="0.0.5",
     author="Eliot Kalfon",
     author_email="eliott.kalfon@gmail.com",
     description="Evolution inspired optimisation algorithms",

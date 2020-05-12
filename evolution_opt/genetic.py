@@ -7,6 +7,11 @@ It was inspired by the following paper:
 
     Saltori, Cristiano, et al. "Regularized Evolutionary Algorithm for Dynamic Neural Topology Search." 
     International Conference on Image Analysis and Processing. Springer, Cham, 2019.
+    
+The example folder contains two examples of genetic algorithms used to:<br>
+1) Optimise the architecture and hyperparameters of a Neural Network ([link](https://github.com/eliottkalfon/evolution_opt/blob/master/example/Neural%20Network%20Optimisation.ipynb))<br>
+2) Tune the hyperparameters of a Support Vector Machine and XGBoost model ([link](https://github.com/eliottkalfon/evolution_opt/blob/master/example/SVM%20and%20XGBoost%20Optimisation.ipynb))
+
 
 Example:
     To use this module, follow these three simple steps:
