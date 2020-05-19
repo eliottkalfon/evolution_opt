@@ -11,7 +11,7 @@ This first version includes an implementation of genetic algorithm with "regular
 Genetic algorithms are very useful in machine learning, especially in **hyperparameter tuning**.
 The example folder contains two examples of genetic algorithms used to:<br>
 1) Optimise the architecture and hyperparameters of a Neural Network ([link](https://github.com/eliottkalfon/evolution_opt/blob/master/example/Neural%20Network%20Optimisation.ipynb))<br>
-2) Tune the hyperparameters of a Support Vector Machine and XGBoost model ([link](https://github.com/eliottkalfon/evolution_opt/blob/master/example/SVM%20and%20XGBoost%20Optimisation.ipynb))
+2) Tune the hyperparameters of a Support Vector Machine and a XGBoost model ([link](https://github.com/eliottkalfon/evolution_opt/blob/master/example/SVM%20and%20XGBoost%20Optimisation.ipynb))
 
 The full documentation can be found [here](https://eliottkalfon.github.io/evolution_opt/).
 
