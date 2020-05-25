@@ -1,8 +1,0 @@
-README.md
-setup.py
-evolution_opt/__init__.py
-evolution_opt/genetic.py
-evolution_opt.egg-info/PKG-INFO
-evolution_opt.egg-info/SOURCES.txt
-evolution_opt.egg-info/dependency_links.txt
-evolution_opt.egg-info/top_level.txt
