@@ -4,7 +4,7 @@
 
 This package is a Python aims at providing a range of nature-inspired optimisation algorithms. 
 The purpose of an optimisation algorithm is to find the maximum or minimum of a function. <br>
-Genetic algorithms are particularly useful when it comes to **high-dimensional, non-linear and non-convex problems** (e.g. finding a needle in a 10-dimensional hay). 
+Genetic algorithms are particularly useful when it comes to **high-dimensional, non-linear and non-convex problems** (e.g. finding a needle in the 10-dimensional hay). 
 They have a wide range of application from supply chain optimisation to hyperparameter tuning.
 This first version includes an implementation of genetic algorithm with "regularized evolution".
 
